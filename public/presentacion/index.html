@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>XPaze — Los Zenith — NASA Space Apps Málaga 2026</title>
+<link rel="icon" href="/favicon.png" type="image/png">
+<style>
+/* Geist (SIL Open Font License), servida desde xpaze.es */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url(/fonts/geist-300-800-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url(/fonts/geist-300-800-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<style>
+:root{
+  --bg:#F5F6F8; --bg2:#FFFFFF; --ink:#0D1321; --muted:#5B6475; --faint:#8A93A3;
+  --line:rgba(13,19,33,.10); --line2:rgba(13,19,33,.18);
+  --pulse:#E5243F; --mind:#6D4AFF; --ok:#12A150; --warn:#D47200; --sky:#2F7BEA;
+  --accent:var(--pulse); --sheen:#8A93A3;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  background:var(--bg);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  background:var(--bg);color:var(--ink);overflow:hidden;
+  font-family:"Geist",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:clamp(14px,.5rem + .5vmin + .32vw,19px);line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+body.mind{--accent:var(--mind)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
+
+/* fondo */
+#stars{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.aura{position:fixed;inset:-20%;z-index:0;pointer-events:none;transition:opacity 1.4s ease;filter:blur(20px)}
+.aura.body{background:radial-gradient(40% 35% at 78% 8%,color-mix(in srgb,var(--pulse) 16%,transparent),transparent 70%),radial-gradient(45% 40% at 10% 100%,color-mix(in srgb,var(--sky) 12%,transparent),transparent 70%)}
+.aura.mindg{opacity:0;background:radial-gradient(50% 45% at 30% 45%,color-mix(in srgb,var(--mind) 22%,transparent),transparent 70%),radial-gradient(40% 40% at 90% 90%,color-mix(in srgb,var(--mind) 14%,transparent),transparent 70%)}
+body.mind .aura.body{opacity:0}
+body.mind .aura.mindg{opacity:1}
+
+/* escenario */
+.stage{position:fixed;inset:0;z-index:1;overflow:hidden;top:env(safe-area-inset-top,0px);bottom:env(safe-area-inset-bottom,0px)}
+.slide{
+  position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;
+  padding:clamp(4rem,9.5vh,5.6rem) clamp(1.25rem,6vw,6rem) 5.2rem;
+  display:flex;flex-direction:column;justify-content:center;
+  opacity:0;visibility:hidden;
+  transform:translate3d(var(--dx,70px),0,0) scale(.985);filter:blur(12px);
+  transition:opacity .7s cubic-bezier(.2,.7,.1,1),transform 1s cubic-bezier(.16,1,.3,1),filter .7s ease,visibility 0s linear .7s;
+}
+.slide.active{opacity:1;visibility:visible;transform:none;filter:none;
+  transition:opacity .9s cubic-bezier(.2,.7,.1,1) .12s,transform 1.2s cubic-bezier(.16,1,.3,1) .12s,filter .9s ease .12s,visibility 0s}
+.inner{width:100%;max-width:1240px;margin:0 auto;position:relative}
+
+/* entradas */
+[data-a]{opacity:0;transform:translate3d(0,22px,0);filter:blur(8px);
+  transition:opacity .9s cubic-bezier(.2,.7,.1,1),transform 1.2s cubic-bezier(.16,1,.3,1),filter .9s ease;
+  transition-delay:calc(var(--i,0) * 70ms + 240ms)}
+.slide.in [data-a]{opacity:1;transform:none;filter:none}
+.split .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
+.split .w > span{display:inline-block;transform:translate3d(0,108%,0) rotate(4deg);transform-origin:0 100%;
+  transition:transform 1.1s cubic-bezier(.16,1,.3,1);transition-delay:var(--wd,0ms)}
+.slide.in .split .w > span{transform:none}
+
+/* tipografía */
+.pill{display:inline-flex;align-items:center;gap:.55em;font-size:.82em;font-weight:500;color:var(--muted);
+  border:1px solid var(--line2);border-radius:999px;padding:.38em .95em;background:color-mix(in srgb,var(--bg2) 55%,transparent);backdrop-filter:blur(10px)}
+.pill i{width:.5em;height:.5em;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+.pill.mindp{color:var(--mind);border-color:color-mix(in srgb,var(--mind) 45%,transparent)}
+.pill.mindp i{background:var(--mind);box-shadow:0 0 12px var(--mind)}
+h1,h2,h3,h4{margin:0;font-weight:650}
+h2{font-size:clamp(1.9rem,.6rem + 2.2vw + 1.6vh,3.6rem);letter-spacing:-.04em;line-height:1.03;max-width:22ch;margin:0 0 .5rem}
+.lede{font-size:clamp(1.02rem,.9rem + .4vw,1.32rem);color:var(--muted);max-width:52ch;margin:0;line-height:1.45}
+.small{font-size:.84em;color:var(--faint)}
+.src{font-size:.7em;color:var(--faint);line-height:1.45;margin:0;max-width:150ch}
+.statement{font-size:1.18em;font-weight:500;letter-spacing:-.015em;line-height:1.4;max-width:62ch;margin:0}
+.statement span{color:var(--accent)}
+
+/* 1 portada */
+.mega{font-size:clamp(4.4rem,1rem + 8vw + 5vh,11rem);font-weight:700;letter-spacing:-.065em;line-height:.85;margin:.12em 0 .14em -.04em;
+  background:linear-gradient(100deg,var(--ink) 0%,var(--ink) 42%,var(--sheen) 50%,var(--ink) 58%,var(--ink) 100%);
+  background-size:300% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;color:transparent}
+.slide.in .mega{animation:sheen 7s cubic-bezier(.4,0,.2,1) 1.4s infinite}
+@keyframes sheen{0%{background-position:100% 0}45%,100%{background-position:0 0}}
+.hero .lede{color:var(--ink);font-size:clamp(1.1rem,.85rem + .8vw,1.65rem);letter-spacing:-.015em;max-width:40ch}
+.ecg-wrap{position:relative;height:clamp(80px,14vh,150px);margin:clamp(.6rem,2.4vh,1.6rem) 0 .3rem}
+.ecg-wrap canvas{position:absolute;inset:0;width:100%;height:100%}
+.ecg-wrap .band{position:absolute;left:0;right:0;top:53%;height:18%;border-radius:6px;background:color-mix(in srgb,var(--sky) 9%,transparent);
+  border:1px dashed color-mix(in srgb,var(--sky) 35%,transparent)}
+.band-l{color:var(--sky);margin:0 0 1.2rem;font-size:.84em}
+.meta{display:grid;grid-template-columns:minmax(0,.55fr) minmax(0,1.5fr) minmax(0,1.1fr);gap:clamp(1rem,3vw,3rem);margin:0;max-width:1100px}
+.meta > div{border-top:1px solid var(--line2);padding-top:.8rem}
+.meta dt{font-size:.8em;color:var(--muted);margin-bottom:.25rem}
+.meta dd{margin:0;font-size:1.02em;font-weight:550;letter-spacing:-.01em;line-height:1.35}
+.meta .live{color:var(--ok);display:flex;gap:.55em;align-items:baseline}
+.meta .live::before{content:"";flex:none;width:.5em;height:.5em;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok);transform:translateY(-.1em)}
+.hint{margin-top:1.3rem;display:flex;gap:.5em;align-items:center;flex-wrap:wrap}
+.hint .touch{display:none}
+@media (hover:none){.hint .keys{display:none}.hint .touch{display:inline}}
+kbd{font-family:inherit;font-size:.82em;font-weight:600;border:1px solid var(--line2);border-bottom-width:2px;border-radius:6px;padding:.05em .45em;color:var(--ink);background:color-mix(in srgb,var(--bg2) 70%,transparent)}
+
+/* 2 problema */
+.prob{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(1.5rem,4vw,4rem);align-items:center;margin-top:1.4rem}
+.bignum{display:flex;align-items:baseline;gap:.15em;font-size:clamp(5rem,2rem + 6vw + 4vh,10rem);font-weight:700;letter-spacing:-.06em;line-height:.85;color:var(--accent);font-variant-numeric:tabular-nums}
+.bignum small{font-size:.32em;letter-spacing:-.01em;font-weight:600}
+.cap{font-size:1.08em;color:var(--muted);margin:.9rem 0 0;max-width:30ch;line-height:1.42}
+.signal{position:relative;height:28px;margin-top:1.2rem;max-width:420px}
+.signal .ln{position:absolute;left:14px;right:22px;top:50%;height:1px;background:repeating-linear-gradient(90deg,var(--line2) 0 6px,transparent 6px 12px)}
+.signal .e{position:absolute;left:0;top:50%;width:22px;height:22px;margin-top:-11px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#8fd3ff,#2f7bea 45%,#0c3a86)}
+.signal .m{position:absolute;right:0;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3f3f3,#9a9a9a)}
+.signal .dot{position:absolute;top:50%;left:14px;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px 2px var(--accent);opacity:0}
+.slide.in .signal .dot{animation:sig 3.4s cubic-bezier(.45,.05,.55,.95) 1s infinite}
+@keyframes sig{0%{left:14px;opacity:0}10%{opacity:1}78%{opacity:1}92%{left:calc(100% - 20px);opacity:0}100%{left:calc(100% - 20px);opacity:0}}
+.lt{font-size:.95em;color:var(--muted);margin:0 0 .6rem}
+.conds{list-style:none;margin:0;padding:0}
+.conds li{display:flex;align-items:center;gap:.9rem;font-size:clamp(1.15rem,.9rem + .7vw,1.55rem);font-weight:600;letter-spacing:-.02em;padding:.42rem 0;border-bottom:1px solid var(--line)}
+.conds li::before{content:"";flex:none;width:.42em;height:.42em;border-radius:50%;background:var(--accent);box-shadow:0 0 0 .3em color-mix(in srgb,var(--accent) 16%,transparent)}
+.issues{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1rem,2.5vw,2.2rem);margin-top:clamp(1.4rem,4vh,2.6rem)}
+.issues > div{position:relative;border-top:1px solid var(--line2);padding-top:1rem}
+.issues > div::before{content:"";position:absolute;left:0;top:-1px;width:2.4rem;height:2px;background:var(--accent)}
+.issues h3{font-size:1.12em;letter-spacing:-.02em;margin-bottom:.3rem}
+.issues p{margin:0;color:var(--muted);font-size:.93em}
+
+/* 3 solución */
+.qa{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(1.2rem,3.5vw,3.5rem);margin-top:1rem;align-items:start}
+.quote{margin:0;font-size:1.2em;line-height:1.38;letter-spacing:-.015em;padding-left:1rem;border-left:2px solid var(--accent)}
+.quote em{font-style:normal;color:var(--accent);font-weight:600}
+.why{margin:0;color:var(--muted);font-size:.95em}
+.why strong{color:var(--ink);font-weight:600}
+.parts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(1rem,2.2vw,2rem);margin-top:clamp(1.2rem,3vh,2rem)}
+.parts > div{border-top:1px solid var(--line2);padding-top:.9rem}
+.parts svg{width:40px;height:40px;margin-bottom:.4rem;overflow:visible}
+.parts h3{font-size:1.08em;letter-spacing:-.02em;margin-bottom:.25rem}
+.parts p{margin:0;color:var(--muted);font-size:.88em;line-height:1.42}
+.parts .key{border-top-color:color-mix(in srgb,var(--ok) 60%,transparent)}
+.parts .key .draw *{stroke:var(--ok)}
+.draw *{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;
+  transition:stroke-dashoffset 1.6s cubic-bezier(.65,0,.35,1);transition-delay:calc(var(--i,0)*70ms + 500ms)}
+.slide.in .draw *{stroke-dashoffset:0}
+.lights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1rem,2.2vw,2rem);margin-top:clamp(1rem,2.6vh,1.6rem);padding:.9rem 1.1rem;border-radius:16px;background:color-mix(in srgb,var(--bg2) 55%,transparent);border:1px solid var(--line)}
+.light{display:flex;gap:.75rem;align-items:flex-start;font-size:.9em;color:var(--muted);line-height:1.42}
+.light i{flex:none;width:.85em;height:.85em;border-radius:50%;margin-top:.25em;background:var(--c);box-shadow:0 0 0 .28em color-mix(in srgb,var(--c) 18%,transparent),0 0 14px var(--c)}
+.light b{color:var(--ink);font-weight:600}
+.offline{display:flex;align-items:center;gap:.6rem;margin:1rem 0 0;font-size:.86em;color:var(--muted)}
+.offline svg{width:1.2em;height:1.2em;flex:none;fill:none;stroke:var(--ok);stroke-width:2;stroke-linecap:round}
+
+/* 4 mente */
+.mgrid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(1.5rem,4vw,4rem);align-items:center;margin-top:.8rem}
+.pcol{display:flex;flex-direction:column;align-items:center;text-align:center}
+.pstage{position:relative;width:min(100%,29vh,320px);aspect-ratio:1;border-radius:32px;
+  background:radial-gradient(75% 65% at 50% 45%,color-mix(in srgb,var(--mind) 16%,transparent),transparent 72%),color-mix(in srgb,var(--bg2) 40%,transparent);border:1px solid var(--line)}
+.pstage .orbhost{position:absolute;inset:0;border-radius:inherit;overflow:hidden}
+.pcol .pill{margin-top:1rem}
+.pcol h3{font-size:1.45em;letter-spacing:-.03em;margin:.5rem 0 .3rem}
+.pcol p{margin:0;color:var(--muted);font-size:.92em;max-width:36ch}
+.mh{font-size:.92em;font-weight:600;color:var(--muted);margin:0 0 .5rem}
+.mh.add{margin-top:1.1rem;color:var(--mind)}
+.sup{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+.sup > div{border-top:1px solid var(--line2);padding-top:.55rem}
+.sup b{display:block;font-size:.98em;font-weight:600}
+.sup span{display:block;color:var(--muted);font-size:.86em;line-height:1.4}
+.madd{list-style:none;margin:0;padding:0}
+.madd li{display:grid;grid-template-columns:1.1rem 1fr;gap:.55rem;font-size:.88em;color:var(--muted);line-height:1.42;padding:.38rem 0;border-bottom:1px solid var(--line)}
+.madd li::before{content:"";width:.5rem;height:.5rem;border-radius:50%;background:var(--mind);margin-top:.45em;box-shadow:0 0 10px var(--mind)}
+.madd b{color:var(--ink);font-weight:600}
+.mfoot{margin-top:clamp(.8rem,2.4vh,1.8rem)}
+.mfoot .src{margin-top:.6rem}
+
+/* 5 nasa */
+.tbl{margin-top:1.2rem}
+.tbl > div{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.55fr) minmax(0,.7fr);gap:clamp(1rem,2.4vw,2.4rem);align-items:center;padding:.85rem 1rem;border-bottom:1px solid var(--line)}
+.tbl .hd{font-size:.8em;font-weight:600;color:var(--muted);border-bottom-color:var(--line2);padding-top:.3rem;padding-bottom:.5rem}
+.tbl h3{font-size:1.02em;letter-spacing:-.015em;line-height:1.28}
+.tbl p{margin:0;color:var(--muted);font-size:.9em;line-height:1.42}
+.tbl .wo{display:flex;gap:.6em;align-items:baseline;font-size:.88em;font-weight:600;color:var(--warn)}
+.tbl .wo::before{content:"";flex:none;width:.7em;height:2px;background:currentColor;transform:translateY(-.25em)}
+.tbl .hd .wo{color:var(--muted)}
+.tbl .hd .wo::before{display:none}
+.tbl .donki{border-radius:14px;background:color-mix(in srgb,var(--sky) 9%,transparent);border-bottom-color:transparent;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--sky) 30%,transparent)}
+.tag{display:inline-flex;align-items:center;gap:.45em;font-size:.76em;font-weight:600;color:var(--sky);border:1px solid color-mix(in srgb,var(--sky) 40%,transparent);border-radius:999px;padding:.15em .65em;margin-top:.4rem}
+.tag::before{content:"";width:.45em;height:.45em;border-radius:50%;background:var(--sky);animation:blink 1.6s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+.s5 .statement{margin-top:clamp(1.2rem,3.4vh,2.2rem)}
+.s5 .statement span{color:var(--sky)}
+
+/* 6 cómo decide */
+.mons{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1rem,2.5vw,2rem);margin-top:1rem}
+.mon{border-radius:20px;padding:1rem 1.3rem 1.1rem;background:color-mix(in srgb,var(--bg2) 70%,transparent);border:1px solid color-mix(in srgb,var(--c) 45%,transparent);
+  box-shadow:0 0 50px -10px color-mix(in srgb,var(--c) 25%,transparent);--c:var(--ok)}
+.mon.warn{--c:var(--warn)}
+.mon .st{display:flex;align-items:center;gap:.6em;font-weight:650;color:var(--c);font-size:.95em}
+.mon .st i{width:.65em;height:.65em;border-radius:50%;background:currentColor;box-shadow:0 0 0 .3em color-mix(in srgb,var(--c) 22%,transparent)}
+.mon .ex{margin-left:auto;font-size:.76em;font-weight:600;color:var(--muted);border:1px solid var(--line2);border-radius:999px;padding:.15em .7em}
+.mon .num{display:flex;align-items:baseline;gap:.6rem;margin-top:.2rem}
+.mon .num b{font-size:clamp(3.4rem,1.6rem + 3vw + 2vh,6rem);font-weight:700;letter-spacing:-.06em;line-height:1;font-variant-numeric:tabular-nums}
+.mon .num span{color:var(--muted);font-size:.92em}
+.mon .ctx{margin:.1rem 0 0;color:var(--muted);font-size:.9em}
+.mon svg{display:block;width:100%;height:auto;margin:.5rem 0 .4rem;overflow:visible}
+.mon .msg{margin:0;font-size:.98em;line-height:1.42}
+.mini .bd{fill:color-mix(in srgb,var(--sky) 8%,transparent);stroke:color-mix(in srgb,var(--sky) 30%,transparent);stroke-dasharray:4 6}
+.mini .ln{fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.3s linear .5s}
+.mini .ln.b{transition:stroke-dashoffset .9s linear 1.8s}
+.slide.in .mini .ln{stroke-dashoffset:0}
+.mini .pt{opacity:0;transition:opacity .4s 2.6s}
+.slide.in .mini .pt{opacity:1}
+.pts h3{font-size:.95em;font-weight:600;color:var(--muted);margin:clamp(1.2rem,3.4vh,2rem) 0 0}
+.steps{position:relative;margin-top:1rem}
+.steps .rail{position:absolute;left:0;right:0;top:9px;height:2px;background:var(--line)}
+.steps .fill{position:absolute;left:0;top:9px;height:2px;width:0;background:var(--mind);box-shadow:0 0 14px var(--mind);transition:width .65s cubic-bezier(.65,0,.35,1)}
+.steps ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.2rem;position:relative}
+.steps li{padding-top:2rem;position:relative;opacity:.35;transition:opacity .6s}
+.steps li::before{content:"";position:absolute;top:2px;left:0;width:16px;height:16px;border-radius:50%;background:var(--bg);border:2px solid var(--line2);transition:all .5s}
+.steps li.on{opacity:1}
+.steps li.on::before{background:var(--c);border-color:var(--c);box-shadow:0 0 0 6px color-mix(in srgb,var(--c) 20%,transparent),0 0 18px var(--c)}
+.steps li{--c:var(--mind)}
+.steps h4{font-size:1.02em;letter-spacing:-.015em;margin-bottom:.2rem}
+.steps p{margin:0;font-size:.86em;color:var(--muted)}
+
+/* 7 hoy */
+.cols{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr) minmax(0,1fr);gap:clamp(1rem,2.6vw,2.6rem);margin-top:1rem}
+.cols h3{display:flex;align-items:center;gap:.5em;font-size:1.05em;letter-spacing:-.02em;padding-bottom:.55rem;border-bottom:2px solid var(--c);margin-bottom:.35rem;color:var(--c)}
+.cols h3 svg,.cols li svg{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.cols h3 svg{width:1.15em;height:1.15em}
+.cols ul{list-style:none;margin:0;padding:0}
+.cols li{display:grid;grid-template-columns:1.1rem 1fr;gap:.5rem;font-size:.86em;line-height:1.35;padding:.3rem 0;color:var(--muted)}
+.cols li svg{width:1rem;height:1rem;margin-top:.12em;color:var(--c)}
+.cols .done{--c:var(--ok)} .cols .done li{color:var(--ink)}
+.cols .dev{--c:var(--sky)} .cols .lim{--c:var(--warn)}
+.closer{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.6fr) auto;gap:clamp(1rem,3vw,2.6rem);align-items:center;margin-top:clamp(1.1rem,3vh,2rem);padding-top:clamp(1rem,2.6vh,1.6rem);border-top:1px solid var(--line2)}
+.next{border-left:2px solid var(--accent);padding-left:1rem}
+.next b{display:block;color:var(--accent);font-size:.9em;margin-bottom:.2rem}
+.next p{margin:0;font-size:.9em;color:var(--muted)}
+.closing{margin:0;font-size:clamp(1.5rem,.8rem + 1.4vw + 1vh,2.5rem);font-weight:650;letter-spacing:-.04em;line-height:1.1}
+.thanks{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;align-items:baseline;margin-top:.6rem;font-weight:600}
+.thanks .g{color:var(--accent);font-size:1.35em;letter-spacing:-.03em}
+.thanks a{color:var(--ink);text-decoration:none;border-bottom:2px solid var(--accent)}
+.qr{flex:none;width:clamp(84px,9vw,118px);aspect-ratio:1;background:#fff;border-radius:14px;padding:10px;box-shadow:0 20px 50px -24px rgba(0,0,0,.5),0 0 0 1px var(--line2)}
+.qr svg{width:100%;height:100%;display:block}
+.qr path{stroke:#0D1321;fill:none}
+.s7 .src{margin-top:clamp(.8rem,2vh,1.2rem)}
+
+
+/* 5 nasa: tres niveles */
+.s5 h2{font-size:clamp(1.6rem,.4rem + 1.4vw + 1.1vh,2.7rem)}
+.tier{display:flex;align-items:center;gap:.6rem;font-size:.86em;font-weight:600;color:var(--sky);margin:clamp(.6rem,1.8vh,1.1rem) 0 .45rem}
+.tier i{font-style:normal;width:1.55em;height:1.55em;border-radius:50%;display:grid;place-items:center;background:var(--sky);color:var(--bg);font-size:.8em;font-weight:700}
+.tier.dim{color:var(--muted)}
+.tier.dim i{background:var(--line2);color:var(--ink)}
+.donkib{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.65fr);gap:clamp(1rem,2.4vw,2rem);align-items:center;padding:.75rem 1.1rem;border-radius:14px;
+  background:color-mix(in srgb,var(--sky) 9%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--sky) 30%,transparent)}
+.donkib h3{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;font-size:1.4em;letter-spacing:-.03em}
+.donkib h3 .tag{margin-top:0;font-size:.52em;letter-spacing:0}
+.donkib > p{margin:0;font-size:.88em;color:var(--muted);line-height:1.42}
+.nw{margin:.15rem 0 .1rem!important;font-size:.82em!important;color:var(--sky)!important;font-weight:500;line-height:1.35}
+.nk{margin:.3rem 0 0!important;font-size:.7em!important;color:var(--faint)!important}
+.nk a{color:inherit;text-underline-offset:3px;text-decoration-color:var(--line2)}
+.nk a:hover{color:var(--sky)}
+.thr{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.55fr) minmax(0,.95fr);gap:clamp(1rem,2.4vw,2.2rem)}
+.thr > div > h3,.stk h3{font-size:1.02em;letter-spacing:-.015em}
+.thr > div:not(.stk),.stk > div{border-top:1px solid var(--line2);padding-top:.5rem;min-width:0}
+.thr p{margin:0;font-size:.82em;color:var(--muted);line-height:1.4}
+.thr p b{color:var(--ink);font-weight:600}
+.nl{list-style:none;margin:.2rem 0 0;padding:0}
+.nl li{position:relative;font-size:.8em;color:var(--muted);line-height:1.35;padding:.1rem 0 .1rem .9rem}
+.nl li::before{content:"";position:absolute;left:0;top:.62em;width:.38rem;height:.38rem;border-radius:50%;background:var(--sky)}
+.nl b,.nm dd{color:var(--ink);font-weight:600}
+.nm{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:.12rem .7rem;margin:.25rem 0 0;font-size:.8em;line-height:1.35}
+.nm dt{color:var(--muted)}
+.nm dd{margin:0}
+.stk{display:grid;gap:.65rem;align-content:start}
+.refs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1rem,2.4vw,2.2rem)}
+.refs > div{border-top:1px dashed var(--line2);padding-top:.45rem}
+.refs h3{font-size:.86em;color:var(--muted);letter-spacing:-.01em}
+.refs p{margin:.1rem 0 0;font-size:.75em;color:var(--faint);line-height:1.38}
+.s5 .statement{margin-top:clamp(.7rem,2vh,1.3rem);font-size:1em;max-width:none}
+.nm dd{white-space:nowrap}
+@media (max-height:800px) and (min-width:901px){.s5 .nk{display:none}.tier{margin:.45rem 0 .3rem}.donkib{padding:.55rem 1rem}.s5 .thr p,.nl li,.nm{font-size:.78em}.stk{gap:.4rem}}
+@media (max-width:900px){
+  .donkib,.thr,.refs{grid-template-columns:1fr}
+  .nm{grid-template-columns:auto 1fr}
+}
+
+/* 8 en la Tierra */
+.earth{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(1.5rem,4vw,4rem);align-items:center;margin-top:clamp(1rem,3vh,2rem)}
+.estats{display:grid;gap:clamp(1rem,3vh,1.8rem)}
+.estats > div{border-top:1px solid var(--line2);padding-top:.8rem}
+.enum{display:flex;align-items:baseline;font-size:clamp(3rem,1.4rem + 3vw + 2.4vh,5.6rem);font-weight:700;letter-spacing:-.06em;line-height:.95;color:var(--accent);font-variant-numeric:tabular-nums}
+.enum span{font-size:.8em;margin-right:.04em}
+.estats p{margin:.35rem 0 0;color:var(--muted);font-size:1em;max-width:34ch}
+.places{list-style:none;margin:0;padding:0}
+.places li{display:flex;gap:1rem;align-items:center;padding:.75rem 0;border-bottom:1px solid var(--line)}
+.places li:first-child{border-top:1px solid var(--line)}
+.places svg{flex:none;width:44px;height:44px;overflow:visible}
+.places b{display:block;font-size:1.08em;letter-spacing:-.02em;font-weight:600}
+.places span{display:block;color:var(--muted);font-size:.9em}
+.why3{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:clamp(1.1rem,3vh,2rem)}
+.why3 span{display:inline-flex;align-items:center;gap:.55em;padding:.5em 1em;border-radius:999px;font-size:.92em;font-weight:600;
+  background:color-mix(in srgb,var(--ok) 10%,transparent);border:1px solid color-mix(in srgb,var(--ok) 35%,transparent)}
+.why3 span::before{content:"";width:.5em;height:.5em;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.s8 .src{margin-top:.9rem}
+@media (max-width:900px){.earth{grid-template-columns:1fr}}
+
+/* 3: semáforo con ejemplos */
+.parts > div{display:grid;grid-template-columns:34px 1fr;column-gap:.65rem;align-items:center}
+.parts svg{width:34px;height:34px;margin:0}
+.parts p{grid-column:1/-1;margin-top:.3rem!important}
+.tlh{margin:clamp(.9rem,2.6vh,1.5rem) 0 .5rem;font-size:.9em;font-weight:600;color:var(--muted)}
+.tl3{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,.8fr);gap:clamp(.8rem,1.8vw,1.4rem);align-items:stretch}
+.tl3 .mon{padding:.75rem 1rem .85rem;display:flex;flex-direction:column}
+.tl3 .mon .num{margin-top:.1rem}
+.tl3 .mon .num b{font-size:clamp(2.4rem,1rem + 1.8vw + 1.6vh,4.2rem)}
+.tl3 .mon .num span{font-size:.82em}
+.tl3 .mon svg{margin:.3rem 0 .35rem}
+.tl3 .mon .msg{font-size:.84em;line-height:1.4;color:var(--ink)}
+.tl3 .act{margin:.35rem 0 0;font-size:.8em;font-weight:600;color:var(--warn)}
+.mon.red{--c:var(--pulse)}
+.alarm{position:relative;flex:1;min-height:70px;display:grid;place-items:center;margin:.4rem 0}
+.alarm b{position:relative;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--pulse);color:#fff;font-size:1.5em;font-weight:800;box-shadow:0 0 24px var(--pulse)}
+.alarm span{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:2px solid var(--pulse);opacity:0}
+.slide.in .alarm span{animation:alarm 2s ease-out infinite}
+.slide.in .alarm span:nth-child(2){animation-delay:1s}
+@keyframes alarm{0%{transform:scale(1);opacity:.8}100%{transform:scale(2.6);opacity:0}}
+.s3 .offline{margin-top:.8rem}
+/* 7: puntos del reto */
+.s7 h2{font-size:clamp(1.6rem,.4rem + 1.4vw + 1.1vh,2.7rem)}
+@media (max-height:800px) and (min-width:901px){.s7 .closing{font-size:1.5rem}.s7 .qr{width:80px;padding:7px}}
+.pts7 h3{margin:.5rem 0 0!important}
+.pts7 .steps{margin-top:.7rem}
+.pts7 .steps li{padding-top:1.7rem}
+.s7 .cols{margin-top:clamp(.9rem,2.4vh,1.4rem)}
+@media (max-height:800px) and (min-width:901px){
+  .s3 .qa{margin-top:.5rem}.s3 .quote{font-size:1.05em}.s3 .why{font-size:.86em}
+  .parts{margin-top:.8rem}.parts p{font-size:.8em}
+  .tl3 .mon svg{height:46px}
+  .tl3 .mon .msg{font-size:.8em}
+  .cols li{padding:.16rem 0;font-size:.8em}
+  .pts7 .steps p{font-size:.78em}
+  .closer{margin-top:.8rem;padding-top:.8rem}
+}
+@media (max-width:900px){.tl3{grid-template-columns:1fr}}
+/* Paze: orbe WebGL */
+.orbhost{position:relative}
+.orbhost canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.orbhost.orb-fallback::before{content:"";position:absolute;left:50%;top:50%;width:54%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff,#6fd6ff 35%,#2f7bff 75%);box-shadow:0 0 80px #2f7bff88;animation:orbfb 4s ease-in-out infinite}
+@keyframes orbfb{50%{transform:translate(-50%,-50%) scale(1.06)}}
+
+/* cabecera */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:calc(env(safe-area-inset-top,0px) + clamp(.9rem,2.4vh,1.4rem)) max(clamp(1.25rem,6vw,6rem),calc((100vw - 1240px) / 2)) 0;pointer-events:none}
+.topbar > *{pointer-events:auto}
+.tl{display:flex;align-items:center;gap:1.2rem}
+.brand{display:inline-flex;align-items:center;gap:.6em;font-weight:650;letter-spacing:-.03em;font-size:1.02em;color:var(--ink);text-decoration:none}
+.brand svg{width:1.6em;height:1.1em;overflow:visible}
+.brand svg path{fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .8s}
+.chap{display:inline-flex;align-items:center;gap:.7em;color:var(--muted);font-size:.86em;font-weight:500;transition:opacity .45s,transform .45s}
+.chap.swap{opacity:0;transform:translateY(-4px)}
+.chap::before{content:"";width:1.4em;height:1px;background:var(--line2)}
+.chap:empty{display:none}
+.site-link{color:var(--muted);font-size:.86em;text-decoration:none;border-bottom:1px solid var(--line2);padding-bottom:.05em;transition:color .3s,border-color .3s}
+.site-link:hover{color:var(--ink);border-color:var(--accent)}
+
+/* barra */
+.bar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);transform:translateX(-50%);z-index:5;
+  display:flex;align-items:center;gap:.35rem;padding:.35rem;border-radius:999px;
+  background:color-mix(in srgb,var(--bg2) 72%,transparent);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
+  border:1px solid var(--line2);box-shadow:0 14px 40px -18px rgba(0,0,0,.45);transition:opacity .6s}
+.bar.idle{opacity:.28}
+.bar button{min-width:38px;height:38px;border-radius:999px;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;transition:background .25s,color .25s;padding:0 .2rem}
+.bar button:hover{background:var(--line)}
+.bar button:disabled{opacity:.3;cursor:default;background:transparent}
+.bar button[aria-pressed="true"]{background:var(--line)}
+.bar svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bar .sep{width:1px;height:20px;background:var(--line2);margin:0 .15rem}
+.prog{width:clamp(80px,14vw,180px);height:3px;border-radius:99px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--accent);box-shadow:0 0 10px var(--accent);border-radius:99px;transition:width .8s cubic-bezier(.16,1,.3,1),background .8s}
+.count{font-size:.8em;color:var(--muted);font-variant-numeric:tabular-nums;min-width:3.6em;text-align:center}
+.bar .txt{font-size:.8em;font-weight:650;padding:0 .7rem}
+.bar .timer{font-variant-numeric:tabular-nums;color:var(--muted)}
+.timer.warn{color:var(--warn)!important}
+.timer.over{color:var(--pulse)!important}
+.ic-moon{display:none}
+.dk .ic-sun{display:none}
+.dk .ic-moon{display:block}
+
+/* notas */
+.notes{position:fixed;z-index:6;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 76px);width:min(720px,calc(100% - 2rem));
+  background:color-mix(in srgb,var(--bg2) 94%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line2);border-radius:18px;
+  padding:.9rem 1.1rem 1rem;box-shadow:0 24px 60px -24px rgba(0,0,0,.5)}
+.notes[hidden]{display:none}
+.n-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.8em;color:var(--muted);margin-bottom:.35rem;font-weight:500}
+.n-top b{color:var(--accent);font-weight:650}
+.notes p{margin:0;font-size:.95em;line-height:1.5}
+.notes .nx{color:var(--muted);font-size:.82em;margin-top:.5rem}
+
+/* vista general */
+.ov{position:fixed;inset:0;z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(22px) saturate(1.3);-webkit-backdrop-filter:blur(22px) saturate(1.3);
+  overflow-y:auto;opacity:0;transition:opacity .35s;padding:calc(env(safe-area-inset-top,0px) + clamp(1.5rem,6vh,4rem)) clamp(1.25rem,6vw,6rem) calc(env(safe-area-inset-bottom,0px) + 3rem)}
+.ov[hidden]{display:none}
+.ov.open{opacity:1}
+.ov-in{max-width:1100px;margin:0 auto}
+.ov-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.6rem}
+.ov-head h2{font-size:clamp(1.5rem,1.1rem + 1.4vw,2.3rem);margin:0;max-width:none}
+.xbtn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line2);background:var(--bg2);cursor:pointer;display:grid;place-items:center}
+.xbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.ov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.6rem}
+.ov-grid button{display:flex;flex-direction:column;gap:.35em;text-align:left;padding:.9rem 1rem 1rem;border-radius:16px;border:1px solid var(--line);background:color-mix(in srgb,var(--bg2) 80%,transparent);cursor:pointer;transition:border-color .25s,transform .25s}
+.ov-grid button:hover{border-color:var(--line2);transform:translateY(-2px)}
+.ov-grid button[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.ov-grid em{font-style:normal;font-variant-numeric:tabular-nums;color:var(--faint);font-size:.82em}
+.ov-grid b{font-weight:600;letter-spacing:-.015em;font-size:1.05em}
+.ov-grid small{color:var(--muted);font-size:.8em}
+.ov-keys{display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;margin-top:2.2rem;color:var(--muted);font-size:.86em}
+.ov-keys span{display:inline-flex;gap:.45em;align-items:center}
+
+body:not(.proto-ok) .if-proto,body.proto-ok .if-noproto{display:none!important}
+
+.bar .txt{white-space:nowrap}
+@media (max-height:800px) and (min-width:901px){
+  .slide{padding-top:3.7rem;padding-bottom:4.6rem}
+  .ecg-wrap{height:9.5vh;margin-top:.4rem}
+  .band-l{margin-bottom:.7rem}
+  .hint{display:none}
+  .mega{font-size:clamp(4rem,1rem + 6vw + 4vh,9rem)}
+  .pstage{width:min(100%,24vh,260px)}
+  .pcol h3{margin-top:.3rem}
+  .madd li{padding:.26rem 0;font-size:.85em}
+  .mh.add{margin-top:.7rem}
+  .mfoot .statement{font-size:1.05em}
+  .issues{margin-top:1.1rem}
+}
+@media (max-width:900px){
+  .slide{justify-content:flex-start}
+  .topbar{background:linear-gradient(var(--bg) 55%,transparent);padding-bottom:.9rem}
+  .site-link{display:none}
+  .meta,.prob,.qa,.mgrid,.mons,.closer{grid-template-columns:1fr}
+  .issues,.lights,.cols{grid-template-columns:1fr}
+  .parts{grid-template-columns:1fr 1fr}
+  .sup{grid-template-columns:1fr}
+  .tbl .hd{display:none}
+  .tbl > div{grid-template-columns:1fr;gap:.3rem}
+  .steps ol{grid-template-columns:1fr 1fr;row-gap:1.4rem}
+  .steps .rail,.steps .fill{display:none}
+  .steps li{opacity:1}
+  .pstage{width:min(100%,300px)}
+}
+@media (max-width:560px){
+  .bar .opt,.bar .sep,.prog{display:none}
+  .chap::before{display:none}
+  .parts{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .slide,.slide.active,[data-a],.split .w > span{transition:none!important;filter:none!important}
+  *{animation:none!important}
+}
+@media print{
+  @page{size:landscape;margin:0}
+  html,body{height:auto;overflow:visible}
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #stars,.aura,.bar,.topbar,.ov,.notes,.hint{display:none!important}
+  .stage{position:static;overflow:visible}
+  .slide{position:relative;inset:auto;height:100vh;opacity:1!important;visibility:visible!important;transform:none!important;filter:none!important;break-after:page;overflow:hidden;padding-top:2.5rem;padding-bottom:2rem}
+  [data-a]{opacity:1!important;transform:none!important;filter:none!important}
+  .split .w > span{transform:none!important}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+<div class="aura body" aria-hidden="true"></div>
+<div class="aura mindg" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="tl">
+    <a class="brand" href="#inicio" id="brandLink" aria-label="XPaze, volver a la portada"><svg viewBox="0 0 26 16" aria-hidden="true"><path d="M1 9h6l2-5 3.5 10L15 6l1.5 3H25"/></svg>XPaze</a>
+    <span class="chap" id="chap" aria-live="polite"></span>
+  </div>
+  <a class="site-link" href="https://xpaze.es" target="_blank" rel="noopener">xpaze.es</a>
+</header>
+
+<main class="stage" id="stage">
+
+<!-- 1 -->
+<section class="slide hero" id="inicio" data-name="Inicio" data-name-en="Intro">
+  <div class="inner">
+    <span class="pill" data-a><i></i><span data-en="NASA Space Apps Challenge, Málaga 2026">NASA Space Apps Challenge, Málaga 2026</span></span>
+    <h1 class="mega" data-a>XPaze</h1>
+    <p class="lede" data-a data-en="A pocket doctor for astronauts. It learns what each crew member is normally like, physically and mentally, notices when that changes and explains why, without depending on Earth.">Un médico de bolsillo para astronautas. Conoce cómo es cada tripulante en su salud física y mental, se da cuenta cuando eso cambia y explica por qué, sin depender de la Tierra.</p>
+    <div class="ecg-wrap" data-a><div class="band"></div><canvas id="ecgHero" aria-hidden="true"></canvas></div>
+    <p class="band-l" data-a data-en="Your usual range: the baseline XPaze learns from you">Tu rango habitual: la línea base que XPaze aprende de ti</p>
+    <dl class="meta">
+      <div data-a><dt data-en="Team">Equipo</dt><dd>Los Zenith</dd></div>
+      <div data-a><dt data-en="Challenge">Reto</dt><dd data-en="Create Health Monitoring Software for Astronauts on Space Missions">Software de monitorización de la salud para astronautas en misiones espaciales</dd></div>
+      <div data-a><dt data-en="Status">Estado</dt>
+        <dd class="live if-proto" data-en="Working MVP and a physical prototype reading real sensors">MVP funcional y prototipo físico que ya lee sensores reales</dd>
+        <dd class="live if-noproto" data-en="Working MVP and a physical sensor prototype in testing">MVP funcional y prototipo físico de sensores en pruebas</dd></div>
+    </dl>
+    <p class="hint small" data-a><span class="keys" data-en="Advance with <kbd>→</kbd> or <kbd>Space</kbd>. <kbd>O</kbd> all slides, <kbd>L</kbd> language.">Avanza con <kbd>→</kbd> o <kbd>Espacio</kbd>. <kbd>O</kbd> todas las diapositivas, <kbd>L</kbd> idioma.</span><span class="touch" data-en="Swipe left to advance.">Desliza hacia la izquierda para avanzar.</span></p>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="slide s2" id="problema" data-name="Problema" data-name-en="Problem">
+  <div class="inner">
+    <h2 class="split" data-en="Detecting physiological changes autonomously in deep space.">Detectar cambios fisiológicos de forma autónoma en el espacio profundo.</h2>
+    <div class="prob">
+      <div data-a>
+        <div class="bignum"><b data-count="40">0</b><small>min</small></div>
+        <p class="cap" data-en="without contact: Artemis II behind the Moon, 406,771 km from Earth.">sin contacto pasó Artemis II tras la Luna, a 406.771 km de la Tierra.</p>
+        <div class="signal" aria-hidden="true"><div class="ln"></div><div class="e"></div><div class="m"></div><div class="dot"></div></div>
+      </div>
+      <div>
+        <p class="lt" data-a data-en="On long lunar missions, crews spend months:">En misiones lunares largas, la tripulación pasa meses:</p>
+        <ul class="conds">
+          <li data-a data-en="In microgravity">En microgravedad</li>
+          <li data-a data-en="Isolated and confined">Aislada y encerrada</li>
+          <li data-a data-en="Under cognitive overload and stress">Con sobrecarga y estrés cognitivo</li>
+          <li data-a data-en="Sleeping badly, under stress">Durmiendo mal y con estrés</li>
+          <li data-a data-en="Far from any hospital">Lejos de cualquier hospital</li>
+        </ul>
+      </div>
+    </div>
+    <div class="issues">
+      <div data-a><h3 data-en="The doctor can’t cover everything">El médico no llega a todo</h3><p data-en="Even with a doctor on board, nobody can watch everyone around the clock or read every number.">Aunque haya médico a bordo, no puede vigilar a todos a toda hora ni interpretar cada dato.</p></div>
+      <div data-a><h3 data-en="Some things can’t wait">No todo puede esperar</h3><p data-en="A heart problem or chest pain can’t wait for an answer from Earth.">Un problema cardíaco o un dolor en el pecho no puede esperar a que respondan desde la Tierra.</p></div>
+      <div data-a><h3 data-en="One number alone says little">Un dato suelto dice muy poco</h3><p data-en="Today each number is read on its own: pulse here, temperature there, sleep somewhere else.">Hoy cada dato se mira por separado: el pulso por un lado, la temperatura por otro, el sueño por otro.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="slide s3" id="solucion" data-name="Solución" data-name-en="Solution">
+  <div class="inner">
+    <h2 class="split" data-en="XPaze learns what is normal for each astronaut.">XPaze aprende qué es normal para cada astronauta.</h2>
+    <div class="qa">
+      <p class="quote" data-a data-en="Other devices say “your pulse is 108”. XPaze asks: <em>“is 108 normal for THIS person, NOW?”</em>">Otros aparatos te dicen «tienes 108 pulsaciones». XPaze se pregunta: <em>«¿es normal que ESTA persona tenga 108 pulsaciones AHORA?»</em></p>
+      <p class="why" data-a data-en="Today’s monitors compare everyone against the same fixed thresholds. <strong>XPaze learns your normal and warns you when you leave it</strong>, right away, without waiting for Earth.">Los monitores actuales comparan con umbrales fijos, iguales para todos. <strong>XPaze aprende tu normalidad y avisa cuando te sales de ella</strong>, al momento y sin esperar a la Tierra.</p>
+    </div>
+    <div class="parts">
+      <div data-a>
+        <svg class="draw" viewBox="0 0 64 64" aria-hidden="true"><rect x="14" y="14" width="36" height="38" rx="7" pathLength="1"/><path d="M14 24H7v18h7M50 24h7v18h-7" pathLength="1"/><path d="M21 33h6l3-7 4 14 3-7h6" pathLength="1"/></svg>
+        <h3 data-en="The station">La estación</h3><p data-en="Tap your card and grip the handles: pulse and SpO₂, plus cabin temperature, humidity and pressure.">Pasas tu tarjeta y agarras las asas: pulso y SpO₂, más temperatura, humedad y presión de la cabina.</p>
+      </div>
+      <div data-a>
+        <svg class="draw" viewBox="0 0 64 64" aria-hidden="true"><rect x="19" y="17" width="26" height="30" rx="8" pathLength="1"/><path d="M24 17l2-9h12l2 9M24 47l2 9h12l2-9" pathLength="1"/><path d="M24 33h5l2-5 3 10 2-5h4" pathLength="1"/></svg>
+        <h3>Galaxy Watch</h3><p data-en="Real pulse and steps from a team member’s watch, through our XPaze Link app.">Pulso y pasos reales del reloj de un miembro del equipo, con nuestra app XPaze Link.</p>
+      </div>
+      <div data-a>
+        <svg class="draw" viewBox="0 0 64 64" aria-hidden="true"><rect x="19" y="6" width="26" height="52" rx="6" pathLength="1"/><path d="M28 11h8" pathLength="1"/><path d="M25 26h14M25 33h14M25 40h8" pathLength="1"/></svg>
+        <h3 data-en="Phone app">App móvil</h3><p data-en="Your full history, step-by-step guides, health guidance and psychological support.">Todo tu historial, guías paso a paso, orientación de salud y apoyo psicológico.</p>
+      </div>
+      <div class="key" data-a>
+        <svg class="draw" viewBox="0 0 64 64" aria-hidden="true"><path d="M4 26h56M4 40h56" pathLength="1" stroke-dasharray="1"/><path d="M6 33c8-3 11 3 17 0s9-3 14 0 11 1 21-3" pathLength="1"/></svg>
+        <h3 data-en="Key: personal baseline">La clave: línea base</h3><p data-en="Median + MAD, EWMA and Isolation Forest. NASA’s fixed limits stay as a safety net.">Mediana + MAD, EWMA e Isolation Forest. Los límites fijos de la NASA siguen como red de seguridad.</p>
+      </div>
+    </div>
+    <p class="tlh" data-a data-en="The traffic light, with a real example">El semáforo, con un ejemplo real</p>
+    <div class="tl3">
+      <div class="mon" data-a>
+        <div class="st"><i></i><span data-en="Green, all normal">Verde, todo normal</span><span class="ex" data-en="Example">Ejemplo</span></div>
+        <div class="num"><b data-count="108">0</b><span data-en="beats per minute">pulsaciones por minuto</span></div>
+        <svg class="mini" data-kind="ok" viewBox="0 0 700 84" aria-hidden="true"></svg>
+        <p class="msg" data-en="Right after exercise. That is normal: nothing to do.">Justo después de hacer ejercicio. Es normal: nada que hacer.</p>
+      </div>
+      <div class="mon warn" data-a>
+        <div class="st"><i></i><span data-en="Amber, watch this">Ámbar, ojo con esto</span><span class="ex" data-en="Example">Ejemplo</span></div>
+        <div class="num"><b data-count="84">0</b><span data-en="at rest, but they are always at 62">en reposo, pero siempre está en 62</span></div>
+        <svg class="mini" data-kind="warn" viewBox="0 0 700 84" aria-hidden="true"></svg>
+        <p class="msg" data-en="Slept badly, slight fever: “Your resting pulse has been above your usual for 18 minutes without exercise.”">Ha dormido mal y tiene algo de fiebre: «Tu pulso en reposo lleva 18 minutos por encima de lo habitual sin hacer ejercicio».</p>
+        <p class="act" data-en="Follow the guide, measure again, tell the crew.">Sigue la guía, repite la medición y avisa a la tripulación.</p>
+      </div>
+      <div class="mon red" data-a>
+        <div class="st"><i></i><span data-en="Red, urgent">Rojo, urgente</span></div>
+        <div class="alarm" aria-hidden="true"><span></span><span></span><b>!</b></div>
+        <p class="msg" data-en="Act now with the emergency guide and, when there is a link, alert the flight surgeons.">Se actúa ya con la guía de emergencia y, con enlace, se avisa a los cirujanos de vuelo.</p>
+      </div>
+    </div>
+    <p class="offline" data-a><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span data-en="Baseline and alerts run on board, with no connection. In this prototype, Paze’s voice still uses the cloud.">La línea base y las alertas se calculan a bordo, sin conexión. En este prototipo, la voz de Paze aún usa la nube.</span></p>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="slide s4" id="mente" data-tone="mind" data-name="Mente" data-name-en="Mind">
+  <div class="inner">
+    <h2 class="split" data-en="Isolation also wears the mind down. XPaze watches it too." style="max-width:26ch">El aislamiento también desgasta la mente. XPaze también la vigila.</h2>
+    <div class="mgrid">
+      <div class="pcol" data-a>
+        <div class="pstage"><div class="orbhost" id="orbPaze" role="img" aria-label="Paze, un orbe luminoso que escucha y responde"></div></div>
+        <span class="pill mindp"><i></i><span data-en="Our AI prototype">Nuestro prototipo de IA</span></span>
+        <h3 data-en="Paze, the voice psychologist">Paze, la psicóloga por voz</h3>
+        <p data-en="You talk to her out loud and she answers using your real data: mood, reflexes and sleep help her spot exhaustion or stress.">Hablas con ella en voz alta y te responde con tus datos reales: el ánimo, los reflejos y el sueño le sirven para detectar agotamiento o estrés.</p>
+      </div>
+      <div>
+        <h3 class="mh" data-a data-en="What already exists">Apoyos que ya existen</h3>
+        <div class="sup">
+          <div data-a><b data-en="Therapy and follow-up">Terapia y seguimiento</b><span data-en="Regular video sessions with psychologists and psychiatrists on Earth.">Sesiones periódicas por videollamada con psicólogos y psiquiatras en la Tierra.</span></div>
+          <div data-a><b data-en="Contact with home">Contacto con el hogar</b><span data-en="Regular communication with loved ones via internet and videoconferencing.">Comunicación regular con seres queridos por internet y videoconferencia.</span></div>
+        </div>
+        <h3 class="mh add" data-a data-en="What XPaze adds">Lo que añade XPaze</h3>
+        <ul class="madd">
+          <li data-a><span data-en="<b>Daily watch, not just sessions:</b> it crosses mood, reflexes and sleep with pulse and temperature to spot exhaustion or stress before it shows."><b>Vigilancia diaria, no solo en sesiones:</b> cruza ánimo, reflejos y sueño con pulso y temperatura para detectar agotamiento o estrés antes de que se note.</span></li>
+          <li data-a><span data-en="<b>Guided help in the moment:</b> when sleep or rhythm slips, it suggests breaks, breathing and exercises."><b>Ayuda guiada en el momento:</b> si el sueño o el ritmo se alteran, propone pausas, respiración y ejercicios.</span></li>
+          <li data-a><span data-en="<b>Continuity:</b> Paze remembers past sessions and your real data, so each visit starts where the last one ended."><b>Continuidad:</b> Paze recuerda las sesiones anteriores y tus datos reales, para que cada conversación retome la anterior.</span></li>
+          <li data-a><span data-en="<b>Privacy:</b> the onboard doctor only sees an overall traffic light, unless the astronaut chooses to share more."><b>Privacidad:</b> el médico de a bordo solo ve un semáforo general, salvo que el astronauta decida compartir más.</span></li>
+          <li data-a><span data-en="<b>Complements, does not replace:</b> psychologists on Earth still treat. XPaze gives them data and trends."><b>Complementa, no sustituye:</b> los psicólogos en la Tierra siguen tratando. XPaze les aporta datos y tendencias.</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mfoot">
+      <p class="statement" data-a data-en="Mind and body are linked: a bad night shows up in the pulse and in mood. <span>XPaze watches both together.</span>">La mente y el cuerpo están unidos: una mala noche se nota en el pulso y en el ánimo. <span>XPaze los mira juntos.</span></p>
+      <p class="src" data-a data-en="Sources: ScienceDirect, S2214552420300870; NASA, Mental well-being in space; Nature Translational Psychiatry, s41398-023-02638-5; Psychiatry Advisor, Mental health in space; NASA, Risk of Behavioral Changes and Psychiatric Disorders; NASA, Understanding the Psychological Hazards of Spaceflight on the Space Station; NASA and ISS crew psychology videos.">Fuentes: ScienceDirect, S2214552420300870; NASA, Mental well-being in space; Nature Translational Psychiatry, s41398-023-02638-5; Psychiatry Advisor, Mental health in space; NASA, Risk of Behavioral Changes and Psychiatric Disorders; NASA, Understanding the Psychological Hazards of Spaceflight on the Space Station; vídeos de NASA y psicología de la EEI.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="slide s5" id="nasa" data-name="Datos NASA" data-name-en="NASA data">
+  <div class="inner">
+    <h2 class="split" data-en="What each NASA resource does inside XPaze." style="max-width:none">Qué hace cada dato de la NASA dentro de XPaze.</h2>
+
+    <p class="tier" data-a><i>1</i><span data-en="Live in the app">En vivo en la app</span></p>
+    <div class="donkib" data-a>
+      <div>
+        <h3>DONKI <span class="tag" data-en="Read every 3 h">Lectura cada 3 h</span></h3>
+        <p class="nw" data-en="Space weather database from the NASA Community Coordinated Modeling Center (CCMC)">Base de datos de clima espacial del NASA Community Coordinated Modeling Center (CCMC)</p>
+        <p class="nk"><a href="https://api.nasa.gov" target="_blank" rel="noopener">api.nasa.gov</a></p>
+      </div>
+      <p data-en="The server reads the last 7 days of alerts every 3 h: solar particles, flares, geomagnetic storms and radiation belts. Fixed rules rate them by environment (Mars transit, station, lunar base or rover). Shown in the app and on the landing page.">El servidor lee cada 3 h los avisos de los últimos 7 días: partículas solares, fulguraciones, tormentas geomagnéticas y cinturones de radiación. Unas reglas fijas los valoran según el entorno (tránsito a Marte, estación, base lunar o rover). Sale en la app y en la landing.</p>
+    </div>
+
+    <p class="tier" data-a><i>2</i><span data-en="They set the thresholds">Fijan los umbrales</span></p>
+    <div class="thr">
+      <div data-a>
+        <h3>NASA-STD-3001 Vol. 2</h3>
+        <p class="nw" data-en="Crew habitability">Habitabilidad de la tripulación</p>
+        <p data-en="Cabin air limits in the traffic light:">Límites del aire de cabina en el semáforo:</p>
+        <ul class="nl">
+          <li data-en="<b>Comfort</b> [V2 6013]: 20–25 °C and 30–60 % humidity"><b>Confort</b> [V2 6013]: 20–25 °C y 30–60 % de humedad</li>
+          <li data-en="<b>Health</b> [V2 6012]: 18–27 °C and 25–75 %"><b>Salud</b> [V2 6012]: 18–27 °C y 25–75 %</li>
+          <li data-en="<b>Total pressure</b> [V2 6006]"><b>Presión total</b> [V2 6006]</li>
+          <li data-en="<b>CO₂</b> ≤ 3 mmHg averaged over 1 h [V2 6004]"><b>CO₂</b> ≤ 3 mmHg de media en 1 h [V2 6004]</li>
+        </ul>
+        <p class="nk"><a href="https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-002-eclss.pdf" target="_blank" rel="noopener">OCHMO TB-002 ECLSS</a>, <a href="https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-004-carbon-dioxide.pdf" target="_blank" rel="noopener">OCHMO TB-004 CO₂</a></p>
+      </div>
+      <div data-a>
+        <h3>Human Research Program</h3>
+        <p class="nw" data-en="Official health risks">Riesgos de salud oficiales</p>
+        <p data-en="Each measurement is tied to a risk:">Cada medida está ligada a un riesgo:</p>
+        <dl class="nm">
+          <dt data-en="Pulse and blood pressure">Pulso y tensión</dt><dd>Cardiovascular</dd>
+          <dt data-en="Oxygen">Oxígeno</dt><dd data-en="Hypoxia">Hipoxia</dd>
+          <dt data-en="Glucose">Glucosa</dt><dd data-en="Nutrition">Nutrición</dd>
+          <dt data-en="Sleep">Sueño</dt><dd>Sleep</dd>
+          <dt data-en="Mood">Ánimo</dt><dd data-en="BMed (mental health)">BMed (salud mental)</dd>
+          <dt data-en="Crew relations">Convivencia</dt><dd data-en="Team">Team (equipo)</dd>
+          <dt data-en="Space weather">Clima espacial</dt><dd>Space Radiation</dd>
+          <dt data-en="Grip strength">Fuerza de agarre</dt><dd data-en="Muscle loss">Pérdida de músculo</dd>
+        </dl>
+        <p class="nk"><a href="https://humanresearchroadmap.nasa.gov/risks/" target="_blank" rel="noopener">humanresearchroadmap.nasa.gov/risks</a></p>
+      </div>
+      <div class="stk">
+        <div data-a>
+          <h3>PVT-B</h3>
+          <p class="nw" data-en="Reaction test used in ISS research">Test de reacción usado en la investigación de la ISS</p>
+          <p data-en="Lapse threshold: <b>over 355 ms</b>.">Umbral de lapso: <b>más de 355 ms</b>.</p>
+          <p class="nk"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3197786" target="_blank" rel="noopener">pmc.ncbi.nlm.nih.gov, PMC3197786</a></p>
+        </div>
+        <div data-a>
+          <h3>MSL/RAD</h3>
+          <p class="nw" data-en="Curiosity’s radiation detector, on its way to Mars">Detector de radiación del Curiosity, de camino a Marte</p>
+          <p data-en="Levels for the simulated dosimeter: <b>about 1.8 mSv per day</b> in transit, ≈ 75 µSv/h.">Niveles del dosímetro simulado: <b>unos 1,8 mSv al día</b> en tránsito, ≈ 75 µSv/h.</p>
+          <p class="nk"><a href="https://doi.org/10.1126/science.1235989" target="_blank" rel="noopener">doi.org/10.1126/science.1235989</a></p>
+        </div>
+      </div>
+    </div>
+
+    <p class="tier dim" data-a><i>3</i><span data-en="Reference and inspiration">Referencia e inspiración</span></p>
+    <div class="refs">
+      <div data-a><h3>OSDR, Environmental Data App</h3><p data-en="Real temperature, CO₂ and humidity from the ISS cabin, as a reference so the simulation uses realistic values.">Temperatura, CO₂ y humedad reales de la cabina de la ISS, como referencia para que la simulación tenga valores realistas.</p><p class="nk"><a href="https://visualization.osdr.nasa.gov/eda/" target="_blank" rel="noopener">osdr.nasa.gov/eda</a></p></div>
+      <div data-a><h3>OSDR, OSD-569 (Inspiration4)</h3><p data-en="Inspiration only, not in the code: each astronaut responds differently to flight, which is why XPaze compares you with yourself.">Solo como inspiración, no en el código: cada astronauta responde distinto al vuelo, y por eso XPaze te compara contigo mismo.</p><p class="nk">Overbey et al., Nature 632, 2024</p></div>
+      <div data-a><h3>JPL Horizons</h3><p data-en="Official solar system ephemerides (NASA/JPL). It checks the Earth–Mars delay our website calculates: 11.0 minutes on 14 Nov 2026, and it matches.">Efemérides oficiales del sistema solar (NASA/JPL). Comprueba el retardo Tierra–Marte que calcula la web: 11,0 minutos el 14-11-2026, y coincide.</p><p class="nk"><a href="https://ssd.jpl.nasa.gov/horizons/" target="_blank" rel="noopener">ssd.jpl.nasa.gov/horizons</a></p></div>
+    </div>
+
+    <p class="statement" data-a data-en="NASA data sets the limits and explains each risk. <span>Each astronaut’s baseline decides what is normal for them.</span>">Los datos de la NASA marcan los límites y explican cada riesgo. <span>La línea base de cada astronauta decide qué es normal para él.</span></p>
+  </div>
+</section>
+
+<!-- 6b -->
+<section class="slide s8" id="tierra" data-name="En la Tierra" data-name-en="On Earth">
+  <div class="inner">
+    <h2 class="split" data-en="Not just for astronauts." style="max-width:none">No es solo para astronautas.</h2>
+    <p class="lede" data-a data-en="What works offline in space works anywhere far from a doctor.">Lo que funciona sin conexión en el espacio funciona en cualquier lugar lejos de un médico.</p>
+    <div class="earth">
+      <div class="estats">
+        <div data-a><div class="enum"><b data-count="1890000">0</b></div><p data-en="seafarers worldwide, weeks at sea with no doctor on board.">marinos en todo el mundo, semanas en alta mar sin un médico a bordo.</p></div>
+        <div data-a><div class="enum"><span>+</span><b data-count="1000">0</b></div><p data-en="people winter in Antarctica, isolated for months.">personas pasan el invierno en la Antártida, aisladas durante meses.</p></div>
+      </div>
+      <ul class="places">
+        <li data-a><svg class="draw" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 22 24 9l16 13M12 19v20h24V19" pathLength="1"/><path d="M20 39V28h8v11" pathLength="1"/></svg><div><b data-en="Isolated rural areas">Zonas rurales aisladas</b><span data-en="Villages hours away from the nearest health centre.">Pueblos a horas del centro de salud más cercano.</span></div></li>
+        <li data-a><svg class="draw" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 32c4 3 8 3 12 0s8-3 12 0 8 3 12 0" pathLength="1"/><path d="M14 30V18h20v12M20 18V9h8v9" pathLength="1"/></svg><div><b data-en="Ships and offshore platforms">Barcos y plataformas en alta mar</b><span data-en="Long shifts far from any hospital.">Turnos largos lejos de cualquier hospital.</span></div></li>
+        <li data-a><svg class="draw" viewBox="0 0 48 48" aria-hidden="true"><path d="M4 40 18 14l8 14 5-8 13 20z" pathLength="1"/><path d="M14 22l4-2 3 3" pathLength="1"/></svg><div><b data-en="Expeditions and polar bases">Expediciones y bases polares</b><span data-en="Extreme cold, isolation and no stable signal.">Frío extremo, aislamiento y sin señal estable.</span></div></li>
+        <li data-a><svg class="draw" viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="12" width="32" height="26" rx="5" pathLength="1"/><path d="M24 18v14M17 25h14" pathLength="1"/></svg><div><b data-en="Emergencies and disasters">Emergencias y catástrofes</b><span data-en="When networks go down and help takes time.">Cuando caen las redes y la ayuda tarda en llegar.</span></div></li>
+      </ul>
+    </div>
+    <div class="why3">
+      <span data-a data-en="Works with no connection">Funciona sin conexión</span>
+      <span data-a data-en="Compares you with yourself">Te compara contigo</span>
+      <span data-a data-en="Guides what to do until help arrives">Guía qué hacer hasta que llega ayuda</span>
+    </div>
+    <p class="src" data-a data-en="Sources: BIMCO/ICS Seafarer Workforce Report 2021; CIA World Factbook, Antarctica.">Fuentes: BIMCO/ICS Seafarer Workforce Report 2021; CIA World Factbook, Antártida.</p>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="slide s7" id="hoy" data-name="Qué hay hoy" data-name-en="Today">
+  <div class="inner">
+    <h2 class="split" data-en="What works, what is missing and the limits." style="max-width:none">Qué funciona, qué falta y los límites.</h2>
+    <div class="pts pts7">
+      <h3 data-a data-en="The challenge’s 4 points, covered">Los 4 puntos del reto, cubiertos</h3>
+      <div class="steps" data-a>
+        <div class="rail"></div><div class="fill" id="sfill"></div>
+        <ol id="ssteps">
+          <li><h4 data-en="Capture indicators">Captura de indicadores</h4><p data-en="Station, watch and app">Estación, reloj y app</p></li>
+          <li><h4 data-en="Step-by-step instructions">Instrucciones paso a paso</h4><p data-en="How to measure and why">Cómo medir y por qué</p></li>
+          <li><h4 data-en="Assessment and alerts">Evaluación y alertas</h4><p data-en="Traffic light: NASA + baseline">Semáforo: NASA + línea base</p></li>
+          <li><h4 data-en="Emergency guidance">Guía de emergencia</h4><p data-en="What to do in each case">Qué hacer en cada caso</p></li>
+        </ol>
+      </div>
+    </div>
+    <div class="cols">
+      <div class="done" data-a>
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg><span data-en="Working now">Ya funciona</span></h3>
+        <ul>
+          <li class="if-proto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="Prototype: pulse and SpO₂, cabin, ID card">Prototipo: pulso y SpO₂, cabina y tarjeta</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="App with history and traffic light">App con historial y semáforo</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="Personal baseline computed locally">Línea base personal, calculada en local</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="Real Galaxy Watch data via XPaze Link">Galaxy Watch real con XPaze Link</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="Paze: voice psychologist with memory">Paze: psicóloga por voz con memoria</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="Live NASA space weather (DONKI)">Clima espacial NASA en directo (DONKI)</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="NASA-STD-3001 cabin limits">Límites de cabina NASA-STD-3001</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="Step-by-step and emergency guides">Guías paso a paso y de emergencia</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="Demo with 4 astronauts and xpaze.es">Demo con 4 astronautas y xpaze.es</span></li>
+        </ul>
+      </div>
+      <div class="dev" data-a>
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg><span data-en="In progress">En desarrollo</span></h3>
+        <ul>
+          <li class="if-noproto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg><span data-en="Test the physical prototype with its real sensors">Validar el prototipo físico con sus sensores reales</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg><span data-en="Run Paze on a local AI model, offline">Llevar Paze a un modelo de IA local, sin conexión</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg><span data-en="Add ECG and body temperature to the station">Añadir ECG y temperatura corporal a la estación</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg><span data-en="Test it in real mission conditions">Probarlo en condiciones reales de misión</span></li>
+        </ul>
+      </div>
+      <div class="lim" data-a>
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg><span data-en="Limits">Límites</span></h3>
+        <ul>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span data-en="It does not diagnose and is not a medical device">No diagnostica enfermedades ni es un dispositivo médico</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span data-en="It supports the onboard doctor, never replaces them">Apoya al médico de a bordo, no lo sustituye</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span data-en="Medical decisions are made by doctors">Las decisiones médicas las toman los médicos</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="closer">
+      <div class="next" data-a><b data-en="Next step">Siguiente paso</b><p data-en="Run Paze fully offline, add ECG to the station and test XPaze in a real mission analogue.">Paze en local y sin conexión, ECG en la estación y una prueba en un análogo de misión real.</p></div>
+      <div data-a>
+        <p class="closing" data-en="A pocket doctor that knows you, without depending on Earth.">Un médico de bolsillo que te conoce, sin depender de la Tierra.</p>
+        <div class="thanks"><span class="g" data-en="Thank you!">¡Gracias!</span><span>Los Zenith</span><a href="https://xpaze.es" target="_blank" rel="noopener">xpaze.es</a></div>
+      </div>
+      <div class="qr" data-a role="img" aria-label="Código QR que abre xpaze.es"><svg viewBox="-0.5 -0.5 26 26" shape-rendering="crispEdges"><path d="M0 0.5h7m1 0h2m3 0h2m1 0h1m1 0h7m-25 1h1m5 0h1m1 0h1m1 0h1m3 0h2m2 0h1m5 0h1m-25 1h1m1 0h3m1 0h1m1 0h1m4 0h2m1 0h1m1 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h3m2 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m1 0h2m1 0h2m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-25 1h1m5 0h1m3 0h1m2 0h1m1 0h2m1 0h1m5 0h1m-25 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-17 1h2m2 0h3m-14 1h2m1 0h1m1 0h2m4 0h1m1 0h1m3 0h1m1 0h5m-25 1h1m1 0h4m1 0h2m1 0h1m3 0h1m1 0h1m1 0h1m5 0h1m-24 1h1m2 0h1m1 0h1m3 0h1m2 0h1m4 0h1m1 0h1m1 0h3m-25 1h2m1 0h1m1 0h1m9 0h3m1 0h2m2 0h1m-24 1h2m2 0h3m1 0h2m6 0h4m1 0h1m1 0h2m-17 1h1m2 0h1m1 0h1m2 0h3m2 0h1m2 0h1m-25 1h1m1 0h1m1 0h1m1 0h1m2 0h2m1 0h1m1 0h1m1 0h1m1 0h2m2 0h3m-24 1h3m1 0h1m3 0h1m1 0h1m4 0h1m3 0h1m2 0h1m-24 1h1m2 0h1m2 0h3m2 0h2m2 0h7m-14 1h1m1 0h2m2 0h3m3 0h2m1 0h2m-25 1h7m1 0h3m2 0h4m1 0h1m1 0h2m1 0h2m-25 1h1m5 0h1m2 0h1m2 0h1m2 0h2m3 0h2m1 0h1m-24 1h1m1 0h3m1 0h1m1 0h2m2 0h3m1 0h6m2 0h1m-25 1h1m1 0h3m1 0h1m3 0h2m7 0h4m-23 1h1m1 0h3m1 0h1m1 0h3m1 0h2m1 0h3m2 0h1m3 0h1m-25 1h1m5 0h1m1 0h3m1 0h1m2 0h4m1 0h2m1 0h1m-24 1h7m2 0h4m2 0h2m2 0h1m3 0h2"/></svg></div>
+    </div>
+    <p class="src" data-a data-en="Sources: NASA-STD-3001 Vol. 2; NASA OCHMO Technical Briefs; NASA Human Research Program; NASA CCMC DONKI; NASA OSDR, OSD-569 (Inspiration4); Overbey et al., Nature 632 (2024); BIMCO/ICS Seafarer Workforce Report 2021; CIA World Factbook, Antarctica. AI use declared in AI_USE.md.">Fuentes: NASA-STD-3001 Vol. 2; NASA OCHMO Technical Briefs; NASA Human Research Program; NASA CCMC DONKI; NASA OSDR, OSD-569 (Inspiration4); Overbey et al., Nature 632 (2024); BIMCO/ICS Seafarer Workforce Report 2021; CIA World Factbook, Antártida. Uso de IA declarado en AI_USE.md.</p>
+  </div>
+</section>
+
+</main>
+
+<nav class="bar" id="bar" aria-label="Navegación de diapositivas">
+  <button type="button" id="ovBtn" aria-label="Ver todas las diapositivas"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg></button>
+  <span class="sep" aria-hidden="true"></span>
+  <button type="button" id="prev" aria-label="Diapositiva anterior"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+  <div class="prog" aria-hidden="true"><i id="progI"></i></div>
+  <span class="count" id="count" aria-live="polite"></span>
+  <button type="button" id="next" aria-label="Diapositiva siguiente"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+  <span class="sep" aria-hidden="true"></span>
+  <button type="button" class="txt" id="langBtn">EN</button>
+  <button type="button" class="opt" id="fsBtn"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
+</nav>
+
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="ovTitle" hidden>
+  <div class="ov-in">
+    <div class="ov-head"><h2 id="ovTitle"></h2><button type="button" class="xbtn" id="ovClose"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="ov-grid" id="ovList"></div>
+    <div class="ov-keys" id="ovKeys"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CAMBIAR AQUÍ tras probar el prototipo con los sensores reales:
+   true  -> «Ya funciona: prototipo…» y estado «ya lee sensores reales»
+   false -> «En desarrollo: validar el prototipo…» y estado «en pruebas»
+   ============================================================ */
+var PROTOTIPO_PROBADO = false;
+
+(function(){
+"use strict";
+var RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function css(el,v){return getComputedStyle(el).getPropertyValue(v).trim();}
+document.body.classList.toggle("proto-ok",PROTOTIPO_PROBADO);
+
+var UI={
+  es:{ov:"Todas las diapositivas",ovBtn:"Ver todas las diapositivas (O)",prev:"Diapositiva anterior",next:"Diapositiva siguiente",notes:"Notas del ponente (N)",
+      theme:"Tema claro u oscuro",fs:"Pantalla completa (F)",lang:"EN",langT:"Cambiar a inglés (L)",timer:"Cronómetro de 3 minutos (T). Doble clic para reiniciar",
+      of:"de",slide:"Diapositiva",nextL:"Siguiente: ",last:"Última diapositiva",close:"Cerrar",brand:"XPaze, volver a la portada",nav:"Navegación de diapositivas",
+      keys:[["← →","Navegar"],["O","Esta vista"],["L","Idioma"],["F","Pantalla completa"]]},
+  en:{ov:"All slides",ovBtn:"See all slides (O)",prev:"Previous slide",next:"Next slide",notes:"Speaker notes (N)",
+      theme:"Light or dark theme",fs:"Full screen (F)",lang:"ES",langT:"Switch to Spanish (L)",timer:"3-minute timer (T). Double-click to reset",
+      of:"of",slide:"Slide",nextL:"Next: ",last:"Last slide",close:"Close",brand:"XPaze, back to the title slide",nav:"Slide navigation",
+      keys:[["← →","Navigate"],["O","This view"],["L","Language"],["F","Full screen"]]}
+};
+var lang="es";
+
+/* ---------- utilidades ---------- */
+var timers=[];
+function later(fn,ms){var id=setTimeout(fn,ms);timers.push(id);return id;}
+function clearAll(){timers.forEach(function(id){clearTimeout(id);clearInterval(id);});timers=[];}
+var fmtCache={};
+function fmtN(n){var k=lang;if(!fmtCache[k])fmtCache[k]=new Intl.NumberFormat(k==="en"?"en-GB":"es-ES",{maximumFractionDigits:0});return fmtCache[k].format(n);}
+function countUp(el,delay){
+  var to=parseFloat(el.dataset.count);
+  if(RM){el.textContent=fmtN(to);return;}
+  el.textContent="0";
+  later(function(){
+    var t0=performance.now(),dur=1500;
+    (function f(now){var p=Math.min(1,(now-t0)/dur),e=p===1?1:1-Math.pow(2,-10*p);el.textContent=fmtN(to*e);if(p<1&&el.closest(".slide.active"))requestAnimationFrame(f);else el.textContent=fmtN(to);})(t0);
+  },delay||500);
+}
+
+/* ---------- idioma y títulos partidos ---------- */
+function splitEl(el){
+  var words=el.textContent.trim().split(/\s+/);el.textContent="";
+  words.forEach(function(w,i){
+    var o=document.createElement("span");o.className="w";
+    var s=document.createElement("span");s.textContent=w;s.style.setProperty("--wd",(120+i*50)+"ms");
+    o.appendChild(s);el.appendChild(o);if(i<words.length-1)el.appendChild(document.createTextNode(" "));
+  });
+}
+var tEls=[].slice.call(document.querySelectorAll("[data-en]"));
+tEls.forEach(function(el){el.dataset.es=el.innerHTML;});
+document.querySelectorAll(".split").forEach(splitEl);
+
+/* ---------- trazos animados en canvas ---------- */
+function Trace(cv,o){
+  this.cv=cv;this.ctx=cv.getContext("2d");this.o=o;this.samples=[];this.t=0;this.acc=0;this.running=false;
+  var self=this;this.resize();
+  if(window.ResizeObserver)new ResizeObserver(function(){self.resize();}).observe(cv);
+}
+Trace.prototype.resize=function(){
+  var r=this.cv.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);
+  this.w=r.width;this.h=r.height;this.cv.width=Math.max(1,Math.round(r.width*d));this.cv.height=Math.max(1,Math.round(r.height*d));
+  this.ctx.setTransform(d,0,0,d,0,0);this.headX=this.w*(this.o.head||.86);
+  var n=Math.max(2,Math.ceil(this.headX/this.o.sp)+2);
+  while(this.samples.length<n)this.samples.unshift(0);
+  if(this.samples.length>n)this.samples=this.samples.slice(this.samples.length-n);
+  this.draw();
+};
+Trace.prototype.step=function(dt){
+  this.acc+=dt*this.o.speed/this.o.sp;
+  while(this.acc>=1){this.acc-=1;this.t+=this.o.sp/this.o.speed;this.samples.push(this.o.fn(this.t));this.samples.shift();}
+};
+Trace.prototype.prefill=function(sec){for(var i=0;i<sec*60;i++)this.step(1/60);};
+Trace.prototype.draw=function(){
+  var c=this.ctx,w=this.w,h=this.h;if(!w)return;
+  c.clearRect(0,0,w,h);
+  var col=css(this.cv,this.o.color)||"#f45",n=this.samples.length,base=h*(this.o.base||.62),amp=h*(this.o.amp||.52),sp=this.o.sp;
+  c.save();c.lineWidth=this.o.lw||2.2;c.lineJoin="round";c.lineCap="round";c.strokeStyle=col;c.shadowColor=col;c.shadowBlur=14;
+  c.beginPath();
+  for(var i=0;i<n;i++){var x=this.headX-(n-1-i)*sp,y=base-this.samples[i]*amp;if(i===0)c.moveTo(x,y);else c.lineTo(x,y);}
+  c.stroke();
+  c.globalCompositeOperation="destination-in";
+  var g=c.createLinearGradient(0,0,this.headX,0);g.addColorStop(0,"rgba(0,0,0,0)");g.addColorStop(.35,"rgba(0,0,0,.6)");g.addColorStop(1,"rgba(0,0,0,1)");
+  c.fillStyle=g;c.fillRect(0,0,w,h);c.restore();
+  var hy=base-this.samples[n-1]*amp;
+  c.save();c.fillStyle=col;c.shadowColor=col;c.shadowBlur=24;c.beginPath();c.arc(this.headX,hy,4,0,Math.PI*2);c.fill();c.restore();
+};
+Trace.prototype.start=function(){
+  if(this.running)return;
+  if(RM){this.prefill(6);this.draw();return;}
+  this.running=true;var self=this,prev=performance.now();
+  (function loop(now){if(!self.running)return;var dt=Math.min(.05,(now-prev)/1000);prev=now;self.step(dt);self.draw();self.raf=requestAnimationFrame(loop);})(prev);
+};
+Trace.prototype.stop=function(){this.running=false;cancelAnimationFrame(this.raf);};
+
+function ecgFn(bpm,onBeat){
+  var last=0;
+  return function(t){
+    var per=60/bpm,p=(t%per)/per;
+    if(onBeat&&last<.25&&p>=.25)onBeat();last=p;
+    function g(c,w,a){return a*Math.exp(-((p-c)*(p-c))/(2*w*w));}
+    return g(.12,.025,.12)+g(.232,.008,-.12)+g(.25,.011,1)+g(.27,.009,-.26)+g(.45,.042,.28);
+  };
+}
+
+var ecgHero=new Trace(document.getElementById("ecgHero"),{fn:ecgFn(66),speed:170,sp:2,color:"--pulse"});
+
+/* ---------- estrellas ---------- */
+var sc=document.getElementById("stars"),sx=sc.getContext("2d"),stars=[],sw=0,sh=0,par=0,parT=0,mx=0,my=0;
+function sResize(){var d=Math.min(window.devicePixelRatio||1,2);sw=innerWidth;sh=innerHeight;sc.width=sw*d;sc.height=sh*d;sx.setTransform(d,0,0,d,0,0);}
+sResize();addEventListener("resize",sResize);
+for(var i=0;i<260;i++)stars.push({x:Math.random(),y:Math.random(),z:.15+Math.random()*.85,ph:Math.random()*6.28});
+addEventListener("pointermove",function(e){mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;});
+function drawStars(now){
+  par+=(parT-par)*.04;
+  sx.clearRect(0,0,sw,sh);var col=css(document.body,"--ink")||"#fff";sx.fillStyle=col;
+  for(var i=0;i<stars.length;i++){
+    var s=stars[i],x=((s.x*sw+par*s.z*40+mx*s.z*-18)%sw+sw)%sw,y=s.y*sh+my*s.z*-12;
+    sx.globalAlpha=s.z*.55*(.65+.35*Math.sin(now/900+s.ph));
+    sx.beginPath();sx.arc(x,y,s.z*1.25,0,6.283);sx.fill();
+  }
+  sx.globalAlpha=1;
+  if(!RM)requestAnimationFrame(drawStars);
+}
+requestAnimationFrame(drawStars);
+
+
+
+/* ---------- Paze: orbe WebGL ---------- */
+var PAZE_PRESETS={
+  calma:{energy:.5,ripple:0,size:1,a:"#2f7bff",b:"#6fd6ff",c:"#b9a6ff"},
+  escucha:{energy:1.1,ripple:1,size:1.03,a:"#17b8ff",b:"#5ef0ff",c:"#a8ecff"},
+  empatia:{energy:.6,ripple:0,size:1.02,a:"#ff7a59",b:"#ffb38a",c:"#ff8fb8"},
+  atencion:{energy:1.5,ripple:0,size:.95,a:"#ff9f0a",b:"#ffd166",c:"#ff6a3d"},
+  respira:{energy:.35,ripple:0,size:1,a:"#19c38a",b:"#7be8b4",c:"#c4f5de"}
+};
+var ORB_VS="attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}";
+var ORB_FS=["precision highp float;",
+"uniform vec2 uRes;uniform float uTime,uAmp,uBreath,uHeart,uEnergy,uRipple,uSize;uniform vec3 uA,uB,uC;uniform vec2 uMouse;",
+"float hash(vec3 p){p=fract(p*0.3183099+0.1);p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}",
+"float noise(vec3 x){vec3 i=floor(x),f=fract(x);f=f*f*(3.0-2.0*f);",
+"return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),",
+"mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);}",
+"float fbm(vec3 p){float v=0.0,a=0.5;for(int i=0;i<4;i++){v+=a*noise(p);p*=2.02;a*=0.5;}return v;}",
+"void main(){float m=min(uRes.x,uRes.y);vec2 uv=(gl_FragCoord.xy-0.5*uRes)/m;float t=uTime;float ang=atan(uv.y,uv.x);float d=length(uv);",
+"float R=0.27*uSize*(1.0+0.04*uBreath+0.035*uHeart);vec2 dir=vec2(cos(ang),sin(ang));",
+"float n1=noise(vec3(dir*1.4,t*0.45*uEnergy));float n2=noise(vec3(dir*3.2+5.0,t*1.0*uEnergy));",
+"float edge=R*(1.0+0.07*(n1-0.5)*2.0+0.03*(n2-0.5)*2.0+uAmp*0.12*(n2*2.0-1.0)+uAmp*0.05*sin(ang*6.0+t*8.0));",
+"float px=1.6/m;float inside=1.0-smoothstep(edge-px,edge+px,d);float rr=clamp(d/edge,0.0,1.0);float z=sqrt(max(0.0,1.0-rr*rr));",
+"vec3 N=normalize(vec3(uv/edge,z+0.001));vec3 p=N*1.7+vec3(0.0,0.0,t*0.16*uEnergy);float f=fbm(p+fbm(p*1.3+t*0.1*uEnergy));",
+"vec3 col=mix(uA,uB,smoothstep(0.25,0.75,f));col=mix(col,uC,smoothstep(0.5,0.95,fbm(p*2.1-t*0.13*uEnergy))*0.8);",
+"col+=0.12*uAmp*sin(N.y*9.0+t*9.0);vec3 L=normalize(vec3(-0.45+uMouse.x*0.35,0.6-uMouse.y*0.35,0.8));",
+"float diff=clamp(dot(N,L)*0.5+0.5,0.0,1.0);col*=0.62+0.6*diff;float fres=pow(1.0-z,2.3);col+=uC*fres*0.95;",
+"float spec=pow(max(dot(reflect(-L,N),vec3(0.0,0.0,1.0)),0.0),38.0);col+=vec3(1.0)*spec*0.5;",
+"col+=uA*(1.0-rr)*(1.0-rr)*0.22*(1.0+uHeart*0.9+uAmp*0.7);float rip=0.0;",
+"for(int i=0;i<3;i++){float ph=fract(t*0.32+float(i)/3.0);float rad=edge*(1.04+ph*0.85);float w=0.008+0.012*ph;rip+=exp(-pow((d-rad)/w,2.0))*(1.0-ph);}",
+"float halo=exp(-max(d-edge,0.0)*8.0)*(0.5+0.3*uAmp+0.15*uHeart);vec3 outer=uB*halo+uC*rip*uRipple*0.8;",
+"float fadeEdge=1.0-smoothstep(0.34,0.5,d);outer*=fadeEdge;float aOut=clamp(halo*0.9+rip*uRipple*0.7,0.0,1.0)*fadeEdge;vec3 rgb=col*inside+(1.0-inside)*outer*0.75;",
+"float a=clamp(inside+(1.0-inside)*aOut*0.75,0.0,1.0);gl_FragColor=vec4(rgb,a);}"].join("\n");
+function hex3(h){return [parseInt(h.slice(1,3),16)/255,parseInt(h.slice(3,5),16)/255,parseInt(h.slice(5,7),16)/255];}
+var ptrX=innerWidth/2,ptrY=innerHeight/2;
+addEventListener("pointermove",function(e){ptrX=e.clientX;ptrY=e.clientY;},{passive:true});
+function PazeOrb(host,o){
+  o=o||{};this.host=host;this.rip=o.ripple;this.hr=o.hr||64;this.onMood=o.onMood||null;
+  this.speaking=false;this.speechAmp=0;this.mouth=0;this.breathFn=null;this.clock=Math.random()*20;this.hp=0;this.smx=0;this.smy=0;this.running=false;
+  var p=PAZE_PRESETS[o.mood||"calma"];this.mood=o.mood||"calma";
+  this.cur={energy:p.energy,ripple:this.rip!=null?this.rip:p.ripple,size:p.size,a:hex3(p.a),b:hex3(p.b),c:hex3(p.c)};
+  var cv=document.createElement("canvas");cv.setAttribute("aria-hidden","true");host.appendChild(cv);this.cv=cv;
+  var gl=null;try{gl=cv.getContext("webgl",{alpha:true,premultipliedAlpha:true,antialias:true,preserveDrawingBuffer:true});}catch(err){}
+  if(gl){
+    var mk=function(type,src){var sh=gl.createShader(type);gl.shaderSource(sh,src);gl.compileShader(sh);return sh;};
+    var prog=gl.createProgram();gl.attachShader(prog,mk(gl.VERTEX_SHADER,ORB_VS));gl.attachShader(prog,mk(gl.FRAGMENT_SHADER,ORB_FS));gl.linkProgram(prog);
+    if(!gl.getProgramParameter(prog,gl.LINK_STATUS))gl=null;
+    else{
+      gl.useProgram(prog);var buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+      gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+      var loc=gl.getAttribLocation(prog,"p");gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+      var U=this.U={};["uRes","uTime","uAmp","uBreath","uHeart","uEnergy","uRipple","uSize","uA","uB","uC","uMouse"].forEach(function(n){U[n]=gl.getUniformLocation(prog,n);});
+      gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
+    }
+  }
+  this.gl=gl;
+  if(!gl){cv.remove();host.classList.add("orb-fallback");return;}
+  var self=this;this.resize();
+  if(window.ResizeObserver)new ResizeObserver(function(){self.resize();self.draw(0);}).observe(host);
+  this.draw(0);
+}
+PazeOrb.prototype.resize=function(){if(!this.gl)return;var r=this.host.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);
+  this.cv.width=Math.max(2,Math.round(r.width*d));this.cv.height=Math.max(2,Math.round(r.height*d));this.gl.viewport(0,0,this.cv.width,this.cv.height);};
+PazeOrb.prototype.setMood=function(m){if(!PAZE_PRESETS[m])return;this.mood=m;if(this.onMood)this.onMood(m);};
+PazeOrb.prototype.draw=function(dt){
+  var gl=this.gl;if(!gl)return;
+  var tg=PAZE_PRESETS[this.mood],c=this.cur,k=1-Math.exp(-dt*5);
+  c.energy+=(tg.energy-c.energy)*k;c.size+=(tg.size-c.size)*k;c.ripple+=((this.rip!=null?this.rip:tg.ripple)-c.ripple)*k;
+  var ta=hex3(tg.a),tb=hex3(tg.b),tc=hex3(tg.c);for(var i=0;i<3;i++){c.a[i]+=(ta[i]-c.a[i])*k;c.b[i]+=(tb[i]-c.b[i])*k;c.c[i]+=(tc[i]-c.c[i])*k;}
+  this.mouth+=((this.speaking?this.speechAmp:0)-this.mouth)*(1-Math.exp(-dt*16));
+  var r=this.host.getBoundingClientRect(),mx=0,my=0;
+  if(r.width){mx=Math.max(-1,Math.min(1,((ptrX-r.left)/r.width)*2-1));my=Math.max(-1,Math.min(1,((ptrY-r.top)/r.height)*2-1));}
+  this.smx+=(mx-this.smx)*(1-Math.exp(-dt*5));this.smy+=(my-this.smy)*(1-Math.exp(-dt*5));
+  var bv=.5+.5*Math.sin(this.clock*1.1),size=c.size,breathing=false;
+  if(this.breathFn){var b=this.breathFn();if(b!=null){bv=b;size=c.size*(.78+.4*b);breathing=true;}}
+  var listen=(this.mood==="escucha"&&!this.speaking&&!breathing)?Math.max(0,.16+.14*Math.sin(this.clock*3.1)*Math.sin(this.clock*1.3)+.05*Math.sin(this.clock*7.7)):0;
+  var amp=Math.min(1.2,this.mouth*.95+listen);
+  this.hp=(this.hp+dt*(this.hr/60))%1;var hb=Math.exp(-Math.pow((this.hp-.05)/.06,2))+.6*Math.exp(-Math.pow((this.hp-.3)/.07,2));
+  var U=this.U,slow=RM?.35:1;
+  gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.uniform2f(U.uRes,this.cv.width,this.cv.height);gl.uniform1f(U.uTime,this.clock);gl.uniform1f(U.uAmp,amp);
+  gl.uniform1f(U.uBreath,breathing?bv-.5:(bv-.5)*.7);gl.uniform1f(U.uHeart,RM?0:hb);
+  gl.uniform1f(U.uEnergy,c.energy*slow*(1+amp*.5));gl.uniform1f(U.uRipple,c.ripple);gl.uniform1f(U.uSize,size);
+  gl.uniform3f(U.uA,c.a[0],c.a[1],c.a[2]);gl.uniform3f(U.uB,c.b[0],c.b[1],c.b[2]);gl.uniform3f(U.uC,c.c[0],c.c[1],c.c[2]);
+  gl.uniform2f(U.uMouse,this.smx,this.smy);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+};
+PazeOrb.prototype.start=function(){
+  if(this.running||!this.gl)return;this.running=true;var self=this,prev=performance.now();
+  (function loop(now){if(!self.running)return;var dt=Math.min(.05,(now-prev)/1000);prev=now;self.clock+=dt;self.draw(dt);self.raf=requestAnimationFrame(loop);})(prev);
+};
+PazeOrb.prototype.stop=function(){this.running=false;cancelAnimationFrame(this.raf);this.speaking=false;this.speechAmp=0;this.breathFn=null;};
+
+
+var orbPaze=new PazeOrb(document.getElementById("orbPaze"),{mood:"escucha",hr:64});
+
+/* ---------- trazos de los monitores ---------- */
+document.querySelectorAll("svg.mini").forEach(function(svg){
+  var kind=svg.dataset.kind,W=700,H=84,mid=H*.62,ns="http://www.w3.org/2000/svg",seed=kind==="ok"?11:23;
+  function rnd(){seed=(seed*16807)%2147483647;return seed/2147483647;}
+  var band=document.createElementNS(ns,"rect");band.setAttribute("class","bd");band.setAttribute("x",0);band.setAttribute("width",W);band.setAttribute("y",mid-14);band.setAttribute("height",28);band.setAttribute("rx",6);svg.appendChild(band);
+  var pts=[],drift=0,breach=kind==="warn"?.55:2;
+  for(var x=0;x<=W;x+=3){
+    var t=x/W;drift+=(rnd()-.5)*1.2;drift*=.94;
+    var y=mid+Math.sin(x/37)*2.5+Math.sin(x/91)*3+drift,ph=x%70;
+    if(ph<6)y-=22;else if(ph<9)y+=8;
+    if(kind==="ok")y-=Math.exp(-Math.pow((t-.35)/.12,2))*9;
+    if(t>breach){var k=(t-breach)/(1-breach),e=k*k*(3-2*k);y-=e*H*.42;}
+    pts.push([x,y]);
+  }
+  var si=pts.findIndex(function(p){return p[0]/W>breach;});if(si<0)si=pts.length-1;
+  function mk(a){return a.map(function(p,i){return (i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1);}).join("");}
+  var a=document.createElementNS(ns,"path");a.setAttribute("class","ln");a.setAttribute("pathLength","1");
+  a.style.stroke=kind==="ok"?"var(--ok)":"var(--sky)";a.setAttribute("d",mk(kind==="warn"?pts.slice(0,si+1):pts));svg.appendChild(a);
+  if(kind==="warn"){var b=document.createElementNS(ns,"path");b.setAttribute("class","ln b");b.setAttribute("pathLength","1");b.style.stroke="var(--warn)";b.setAttribute("d",mk(pts.slice(si)));svg.appendChild(b);}
+  var l=pts[pts.length-1],c=document.createElementNS(ns,"circle");c.setAttribute("class","pt");c.setAttribute("cx",l[0]-2);c.setAttribute("cy",l[1]);c.setAttribute("r",5);
+  c.style.fill=kind==="ok"?"var(--ok)":"var(--warn)";svg.appendChild(c);
+});
+
+/* ---------- ganchos de entrada y salida ---------- */
+var hooks={
+  inicio:{enter:function(){ecgHero.start();},leave:function(){ecgHero.stop();}},
+  mente:{enter:function(){orbPaze.setMood("escucha");orbPaze.start();},leave:function(){orbPaze.stop();}},
+  hoy:{enter:function(){var lis=[].slice.call(document.querySelectorAll("#ssteps li")),f=document.getElementById("sfill");
+    lis.forEach(function(l){l.classList.remove("on");});f.style.width="0";
+    lis.forEach(function(l,i){later(function(){l.classList.add("on");f.style.width=(i===lis.length-1?100:(l.offsetLeft+8)/l.parentElement.offsetWidth*100)+"%";},RM?0:1400+i*650);});}}
+};
+
+/* ---------- navegación ---------- */
+var slides=[].slice.call(document.querySelectorAll(".slide")),cur=-1,stage=document.getElementById("stage");
+stage.addEventListener("scroll",function(){if(stage.scrollLeft||stage.scrollTop){stage.scrollLeft=0;stage.scrollTop=0;}});
+slides.forEach(function(s){var k=0;s.querySelectorAll("[data-a]").forEach(function(el){el.style.setProperty("--i",k++);});});
+var prevB=document.getElementById("prev"),nextB=document.getElementById("next"),count=document.getElementById("count"),progI=document.getElementById("progI");
+var chapEl=document.getElementById("chap"),lastChap=null;
+function nameOf(s){return lang==="en"?s.dataset.nameEn:s.dataset.name;}
+function idx(id){return slides.findIndex(function(s){return s.id===id;});}
+function go(i,fromHash){
+  i=Math.max(0,Math.min(slides.length-1,i));if(i===cur)return;
+  var old=slides[cur];clearAll();
+  if(old){var h=hooks[old.id];if(h&&h.leave)h.leave(old);
+    (function(o){setTimeout(function(){if(!o.classList.contains("active"))o.classList.remove("in");},800);})(old);}
+  cur=i;
+  slides.forEach(function(s,k){
+    var on=k===i;s.classList.toggle("active",on);
+    if(on){s.removeAttribute("inert");s.removeAttribute("aria-hidden");}else{s.setAttribute("inert","");s.setAttribute("aria-hidden","true");}
+    if(!on)s.style.setProperty("--dx",(k<i?-70:70)+"px");
+  });
+  var s=slides[i];s.scrollTop=0;s.classList.remove("in");void s.offsetWidth;
+  requestAnimationFrame(function(){s.classList.add("in");});
+  document.body.classList.toggle("mind",s.dataset.tone==="mind");
+  parT=-i*40;
+  s.querySelectorAll("[data-count]").forEach(function(el,k){countUp(el,700+k*150);});
+  var h2=hooks[s.id];if(h2&&h2.enter)h2.enter(s);
+  updateChrome();
+  if(!fromHash){var hs="#"+s.id;if(location.hash!==hs){try{history.replaceState(null,"",hs);}catch(err){}}}
+}
+function updateChrome(){
+  var s=slides[cur],u=UI[lang];
+  prevB.disabled=cur===0;nextB.disabled=cur===slides.length-1;
+  count.textContent=(cur+1)+" "+u.of+" "+slides.length;
+  progI.style.width=((cur+1)/slides.length*100)+"%";
+  var ch=cur===0?"":nameOf(s);
+  if(ch!==lastChap){lastChap=ch;chapEl.classList.add("swap");setTimeout(function(){chapEl.textContent=ch;chapEl.classList.remove("swap");},RM?0:220);}
+}
+function fromHash(){var k=idx((location.hash||"").slice(1));go(k<0?0:k,true);}
+function fwd(){go(cur+1);}
+prevB.addEventListener("click",function(){go(cur-1);});
+nextB.addEventListener("click",fwd);
+addEventListener("hashchange",fromHash);
+
+/* ---------- vista general ---------- */
+var ov=document.getElementById("ov"),ovList=document.getElementById("ovList"),ovBtn=document.getElementById("ovBtn");
+function buildOv(){
+  var u=UI[lang];
+  ovList.innerHTML=slides.map(function(s,i){return '<button type="button" data-i="'+i+'"><em>'+(i+1)+'</em><b>'+nameOf(s)+'</b></button>';}).join("");
+  document.getElementById("ovTitle").textContent=u.ov;
+  document.getElementById("ovKeys").innerHTML=u.keys.map(function(k){return "<span>"+k[0].split(" ").map(function(x){return "<kbd>"+x+"</kbd>";}).join("")+" "+k[1]+"</span>";}).join("");
+}
+ovList.addEventListener("click",function(e){var b=e.target.closest("button[data-i]");if(b){closeOv();go(+b.dataset.i);}});
+function openOv(){
+  ovList.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-current",String(+b.dataset.i===cur));});
+  ov.hidden=false;requestAnimationFrame(function(){ov.classList.add("open");});
+  var c=ovList.querySelector('[aria-current="true"]');if(c)c.focus();
+}
+function closeOv(){ov.classList.remove("open");setTimeout(function(){ov.hidden=true;},RM?0:300);ovBtn.focus();}
+ovBtn.addEventListener("click",openOv);
+document.getElementById("ovClose").addEventListener("click",closeOv);
+ov.addEventListener("click",function(e){if(e.target===ov)closeOv();});
+
+/* ---------- idioma ---------- */
+function setLang(l){
+  lang=l;document.documentElement.lang=l;var u=UI[l];
+  tEls.forEach(function(el){el.innerHTML=l==="en"?el.dataset.en:el.dataset.es;if(el.classList.contains("split"))splitEl(el);});
+  document.getElementById("langBtn").textContent=u.lang;
+  [["langBtn","langT"],["ovBtn","ovBtn"],["prev","prev"],["next","next"],["fsBtn","fs"],["ovClose","close"]].forEach(function(p){
+    var el=document.getElementById(p[0]);el.setAttribute("title",u[p[1]]);if(p[0]!=="langBtn")el.setAttribute("aria-label",u[p[1]]);});
+  document.getElementById("langBtn").setAttribute("aria-label",u.langT);
+  document.getElementById("brandLink").setAttribute("aria-label",u.brand);
+  document.getElementById("bar").setAttribute("aria-label",u.nav);
+  slides.forEach(function(s){s.setAttribute("aria-label",nameOf(s));});
+  fmtCache={};
+  if(cur>=0){lastChap=null;updateChrome();slides[cur].querySelectorAll("[data-count]").forEach(function(el){el.textContent=fmtN(+el.dataset.count);});}
+  buildOv();
+}
+document.getElementById("langBtn").addEventListener("click",function(){setLang(lang==="es"?"en":"es");});
+
+/* ---------- pantalla completa ---------- */
+var root=document.documentElement;
+function toggleFs(){try{if(document.fullscreenElement)document.exitFullscreen();else if(root.requestFullscreen)root.requestFullscreen();}catch(err){}}
+document.getElementById("fsBtn").addEventListener("click",toggleFs);
+if(!root.requestFullscreen)document.getElementById("fsBtn").style.display="none";
+
+/* ---------- teclado y gestos ---------- */
+document.addEventListener("keydown",function(e){
+  var k=e.key,t=e.target;
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if(ov.classList.contains("open")){if(k==="Escape"||k==="o"||k==="O"){e.preventDefault();closeOv();}return;}
+  if(k==="ArrowRight"||k==="PageDown"||((k===" "||k==="Enter")&&t.tagName!=="BUTTON"&&t.tagName!=="A")){e.preventDefault();fwd();}
+  else if(k==="ArrowLeft"||k==="PageUp"||k==="Backspace"){e.preventDefault();go(cur-1);}
+  else if(k==="Home"){e.preventDefault();go(0);}
+  else if(k==="End"){e.preventDefault();go(slides.length-1);}
+  else if(k==="f"||k==="F")toggleFs();
+  else if(k==="o"||k==="O"){e.preventDefault();openOv();}
+  else if(k==="l"||k==="L")setLang(lang==="es"?"en":"es");
+});
+var tx=null,ty=null;
+stage.addEventListener("touchstart",function(e){tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+stage.addEventListener("touchend",function(e){if(tx===null)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.4){if(dx<0)fwd();else go(cur-1);}tx=ty=null;});
+var bar=document.getElementById("bar"),idleT;
+function wake(){bar.classList.remove("idle");clearTimeout(idleT);idleT=setTimeout(function(){bar.classList.add("idle");},2600);}
+["pointermove","keydown","touchstart"].forEach(function(ev){addEventListener(ev,wake,{passive:true});});wake();
+
+/* ---------- impresión ---------- */
+addEventListener("beforeprint",function(){
+  slides.forEach(function(s){s.classList.add("in");});
+  document.querySelectorAll("#ssteps li").forEach(function(l){l.classList.add("on");});
+  document.querySelectorAll("[data-count]").forEach(function(el){el.textContent=fmtN(+el.dataset.count);});
+  ecgHero.resize();if(!ecgHero.running)ecgHero.prefill(4);ecgHero.draw();
+  orbPaze.resize();orbPaze.draw(0);
+});
+addEventListener("afterprint",function(){slides.forEach(function(s,k){if(k!==cur)s.classList.remove("in");});});
+
+/* ---------- inicio ---------- */
+setLang("en");
+fromHash();
+})();
+</script>
+</body>
+</html>
