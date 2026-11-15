@@ -39,7 +39,7 @@ const EMBED = params.has('embed');
 if (EMBED) document.documentElement.classList.add('embed');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: EMBED, powerPreference: 'high-performance' });
 if (EMBED) renderer.setClearColor(0x000000, 0);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 3)); // nitidez máxima razonable
+renderer.setPixelRatio(EMBED ? Math.min(window.devicePixelRatio || 1, 1.25) : Math.min(window.devicePixelRatio || 1, 3)); // dentro de la presentación, ligera
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 0.78;
 renderer.shadowMap.enabled = true;
@@ -71,7 +71,7 @@ const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 4000);
 const sun = new THREE.DirectionalLight('#fff4e6', 2.1);
 sun.position.set(14, 18, -12);
 sun.castShadow = true;
-sun.shadow.mapSize.set(4096, 4096);
+sun.shadow.mapSize.set(EMBED ? 1024 : 4096, EMBED ? 1024 : 4096);
 sun.shadow.camera.left = -16; sun.shadow.camera.right = 16; sun.shadow.camera.top = 16; sun.shadow.camera.bottom = -16;
 sun.shadow.camera.near = 1; sun.shadow.camera.far = 80;
 sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.03;
@@ -236,12 +236,17 @@ function setCaption(text, n) {
   stepN.textContent = n || '';
 }
 
+// captura fotograma a fotograma (?capture=1): window.__renderAt(t) dibuja el instante t
+const CAPTURE = params.has('capture');
+let CAP = null;
+window.__renderAt = (t) => { CAP = t; frame(performance.now()); CAP = null; return true; };
+
 function frame(now) {
   const dt = Math.min(0.05, (now - last) / 1000);
   last = now;
-  let t = freeze ?? (now - t0) / 1000;
+  let t = CAP ?? freeze ?? (now - t0) / 1000;
   if (EMBED && freeze == null && t > T.end) { t0 = now; t = 0; lastStep = -1; lastPhase = ''; shown = 0; } // en bucle
-  const wall = now / 1000;
+  const wall = CAP ?? now / 1000;
 
   /* --- acto 1: la estación se abre y se cierra --- */
   const opening = ease(span(t, T.open, T.opened));
@@ -324,7 +329,7 @@ function frame(now) {
   fin.classList.toggle('is-on', t >= T.done + 2.2);
 
   if (EMBED) renderer.render(scene, camera); else composer.render();
-  requestAnimationFrame(frame);
+  if (!CAPTURE) requestAnimationFrame(frame);
 }
 
 $('#replay').addEventListener('click', () => {
@@ -333,4 +338,4 @@ $('#replay').addEventListener('click', () => {
   station.setScreen(screenTexts('idle'));
 });
 document.querySelectorAll('[data-i]').forEach((el) => { const [es, en] = el.dataset.i.split('|'); el.textContent = L(es, en); });
-requestAnimationFrame(frame);
+if (!CAPTURE) requestAnimationFrame(frame);

@@ -51,7 +51,8 @@ button{font:inherit;color:inherit}
 
 /* fondo */
 #stars{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
-.aura{position:fixed;inset:-20%;z-index:0;pointer-events:none;transition:opacity 1.4s ease;filter:blur(20px)}
+.aura{position:fixed;inset:-20%;z-index:0;pointer-events:none;transition:opacity 1.4s ease}
+body.lite #stars{display:none}
 .aura.body{background:radial-gradient(40% 35% at 78% 8%,color-mix(in srgb,var(--pulse) 16%,transparent),transparent 70%),radial-gradient(45% 40% at 10% 100%,color-mix(in srgb,var(--sky) 12%,transparent),transparent 70%)}
 .aura.mindg{opacity:0;background:radial-gradient(50% 45% at 30% 45%,color-mix(in srgb,var(--mind) 22%,transparent),transparent 70%),radial-gradient(40% 40% at 90% 90%,color-mix(in srgb,var(--mind) 14%,transparent),transparent 70%)}
 body.mind .aura.body{opacity:0}
@@ -249,7 +250,7 @@ kbd{font-family:inherit;font-size:.82em;font-weight:600;border:1px solid var(--l
 .stack7{display:grid;gap:clamp(.7rem,2vh,1.2rem);align-content:start;min-width:0}
 .astro7{position:relative;min-height:clamp(170px,30vh,340px);align-self:stretch;overflow:hidden;border-radius:16px}
 .astro7{-webkit-mask-image:linear-gradient(#000 78%,transparent);mask-image:linear-gradient(#000 78%,transparent)}
-.astro7 iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;pointer-events:none}
+.astro7 img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none}
 @media (max-width:900px){.astro7{min-height:260px}}
 .closer{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.6fr) auto;gap:clamp(1rem,3vw,2.6rem);align-items:center;margin-top:clamp(1.1rem,3vh,2rem);padding-top:clamp(1rem,2.6vh,1.6rem);border-top:1px solid var(--line2)}
 .next{border-left:2px solid var(--accent);padding-left:1rem}
@@ -799,7 +800,7 @@ body:not(.proto-ok) .if-proto,body.proto-ok .if-noproto{display:none!important}
         </ul>
       </div>
       </div>
-      <div class="astro7" data-a aria-hidden="true"><iframe id="astroFrame" title="" tabindex="-1" scrolling="no" allowtransparency="true"></iframe></div>
+      <div class="astro7" data-a aria-hidden="true"><img id="astroImg" alt="" decoding="async" width="640" height="492"></div>
     </div>
     <div class="closer">
       <div class="next" data-a><b data-en="Next step">Siguiente paso</b><p data-en="Run Paze fully offline, add ECG to the station and test XPaze in a real mission analogue.">Paze en local y sin conexión, ECG en la estación y una prueba en un análogo de misión real.</p></div>
@@ -1085,7 +1086,7 @@ document.querySelectorAll("svg.mini").forEach(function(svg){
 var hooks={
   inicio:{enter:function(){ecgHero.start();},leave:function(){ecgHero.stop();}},
   mente:{enter:function(){orbPaze.setMood("escucha");orbPaze.start();},leave:function(){orbPaze.stop();}},
-  hoy:{leave:function(){var f=document.getElementById("astroFrame");if(f)f.removeAttribute("src");},enter:function(){var af=document.getElementById("astroFrame");if(af&&!af.getAttribute("src"))af.src="/astronaut/?embed=1&lang="+lang;var lis=[].slice.call(document.querySelectorAll("#ssteps li")),f=document.getElementById("sfill");
+  hoy:{enter:function(){var ai=document.getElementById("astroImg");if(ai&&!ai.getAttribute("src")){ai.onerror=function(){ai.parentElement.style.display="none";};ai.src="/presentacion/astronaut.webp";}var lis=[].slice.call(document.querySelectorAll("#ssteps li")),f=document.getElementById("sfill");
     lis.forEach(function(l){l.classList.remove("on");});f.style.width="0";
     lis.forEach(function(l,i){later(function(){l.classList.add("on");f.style.width=(i===lis.length-1?100:(l.offsetLeft+8)/l.parentElement.offsetWidth*100)+"%";},RM?0:1400+i*650);});}}
 };
@@ -1101,7 +1102,7 @@ function idx(id){return slides.findIndex(function(s){return s.id===id;});}
 function go(i,fromHash){
   i=Math.max(0,Math.min(slides.length-1,i));if(i===cur)return;
   var old=slides[cur];clearAll();
-  if(old){var h=hooks[old.id];if(h&&h.leave)h.leave(old);
+  if(old){var h=hooks[old.id];if(h&&h.leave){try{h.leave(old);}catch(err){}}
     (function(o){setTimeout(function(){if(!o.classList.contains("active"))o.classList.remove("in");},800);})(old);}
   cur=i;
   slides.forEach(function(s,k){
@@ -1114,7 +1115,7 @@ function go(i,fromHash){
   document.body.classList.toggle("mind",s.dataset.tone==="mind");
   parT=-i*40;
   s.querySelectorAll("[data-count]").forEach(function(el,k){countUp(el,700+k*150);});
-  var h2=hooks[s.id];if(h2&&h2.enter)h2.enter(s);
+  var h2=hooks[s.id];if(h2&&h2.enter){try{h2.enter(s);}catch(err){}}
   updateChrome();
   if(!fromHash){var hs="#"+s.id;if(location.hash!==hs){try{history.replaceState(null,"",hs);}catch(err){}}}
 }
@@ -1214,6 +1215,26 @@ addEventListener("beforeprint",function(){
   orbPaze.resize();orbPaze.draw(0);
 });
 addEventListener("afterprint",function(){slides.forEach(function(s,k){if(k!==cur)s.classList.remove("in");});});
+
+
+/* ---------- a prueba de cuelgues ---------- */
+(window.requestIdleCallback||function(f){setTimeout(f,3000);})(function(){var i=new Image();i.decoding="async";i.src="/presentacion/astronaut.webp";});
+/* si el equipo no da más de ~24 fps durante 3 s seguidos, se quitan el astronauta y las estrellas */
+(function(){
+  var last=performance.now(),slowMs=0,lite=false;
+  function lighten(){if(lite)return;lite=true;document.body.classList.add("lite");}
+  (function tick(now){var dt=now-last;last=now;if(!document.hidden){if(dt>42&&dt<1000)slowMs+=dt;else slowMs=Math.max(0,slowMs-dt*2);if(slowMs>3000)lighten();}requestAnimationFrame(tick);})(last);
+  if(/[?&]lite\b/.test(location.search))lighten();
+  window.__xpazeLite=lighten;
+})();
+/* la pantalla no se apaga mientras se presenta */
+(function(){var lock=null;function keep(){try{if("wakeLock" in navigator&&!lock)navigator.wakeLock.request("screen").then(function(l){lock=l;l.addEventListener("release",function(){lock=null;});}).catch(function(){});}catch(e){}}
+  ["keydown","pointerdown","touchstart"].forEach(function(ev){addEventListener(ev,keep,{passive:true});});document.addEventListener("visibilitychange",function(){if(!document.hidden)keep();});})();
+/* sin conexión: la presentación queda guardada en el navegador tras abrirla una vez */
+if("serviceWorker" in navigator&&location.protocol==="https:"){navigator.serviceWorker.register("/presentacion/sw.js",{scope:"/presentacion/"}).catch(function(){});}
+/* cualquier error de un efecto se ignora: la navegación sigue */
+addEventListener("error",function(e){if(e&&e.preventDefault)e.preventDefault();});
+addEventListener("unhandledrejection",function(e){if(e&&e.preventDefault)e.preventDefault();});
 
 /* ---------- inicio ---------- */
 setLang("en");
