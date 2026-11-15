@@ -8,6 +8,7 @@ import Lenis from 'lenis';
 import { marsLight } from './mars.js';
 import { initI18n, t, locale } from './landing/i18n.js';
 import { startHeroMonitor } from './landing/heromonitor.js';
+import { startLuna } from './landing/luna.js';
 
 // Idioma primero: los textos que montan los módulos de abajo ya salen traducidos.
 const restoreY = initI18n();
@@ -402,6 +403,7 @@ if (!reduced) gsap.from('.hero__chips li', { opacity: 0, y: 12, stagger: 0.06, d
 
 /* ------------------------------------- portada: ECG en directo (estación v2) -- */
 startHeroMonitor($('.hero__monitor'), { reduced });
+startLuna($('#luna'));
 
 window.addEventListener('load', () => {
   ScrollTrigger.refresh();

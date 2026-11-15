@@ -33,6 +33,7 @@
       <ol class="topnav">
         <li><a href="#problema" data-i18n="h.problem">Problem</a></li>
         <li><a href="#sistema" data-i18n="h.system">System</a></li>
+        <li><a href="#luna" class="nav-luna">Luna AI</a></li>
         <li><a href="#mente" data-i18n="h.mind">Mind</a></li>
                 <li><a href="#datos" data-i18n="h.nasa-data">NASA data</a></li>
         <li><a href="#prototipo" data-i18n="h.prototype">Prototype</a></li>
@@ -72,7 +73,7 @@
           <span class="line"><span data-i18n="h.earth">Earth.</span></span>
         </h1>
         <ul class="hero__chips" aria-label="What XPaze does" data-i18n-aria-label="a.what-xpaze-does">
-          <li data-i18n="h.guided-check-up">Guided check-up</li><li data-i18n="h.explainable-traffic-light">Explainable traffic light</li><li data-i18n="h.paze-a-voice-psychologist">Paze, a voice psychologist</li><li data-i18n="h.live-space-weather">Live space weather</li>
+          <li class="chip-luna">Luna AI</li><li data-i18n="h.guided-check-up">Guided check-up</li><li data-i18n="h.explainable-traffic-light">Explainable traffic light</li><li data-i18n="h.paze-a-voice-psychologist">Paze, a voice psychologist</li><li data-i18n="h.live-space-weather">Live space weather</li>
         </ul>
         <p class="hero__sub" data-i18n="h.xpaze-learns-what-each">XPaze learns what each astronaut is like, notices when they are no longer themselves and explains why. No cables, no waiting on Earth.</p>
         <div class="hero__cta">
@@ -290,6 +291,28 @@
             </ul>
             <p class="phone__quote" data-i18n="h.your-resting-heart-rate">“Your resting heart rate has been clearly above usual for 18 minutes without any exercise. Rest and repeat the check-up in an hour.”</p>
           </div>
+        </div>
+      </div>
+
+      <!-- Luna AI: la nueva normal en el espacio, interactiva -->
+      <div class="luna" id="luna">
+        <div class="luna__copy">
+          <p class="luna__k"><span class="luna__moon" aria-hidden="true"></span><span data-i18n="h.luna-k">Prediction model</span></p>
+          <h3 class="luna__t">Luna AI</h3>
+          <p class="luna__lead" data-i18n="h.luna-lead">Your normal on Earth is not your normal in space. From each astronaut’s baseline before launch, Luna AI predicts how their body will adapt, day by day, and corrects itself with every check-up in flight. So XPaze does not raise false alarms for what space does to everyone, and does catch what is not expected.</p>
+          <ul class="luna__facts">
+            <li><b data-i18n="h.luna-f1b">−8 / −9 mmHg</b><span data-i18n="h.luna-f1">blood pressure, with heart rate unchanged</span></li>
+            <li><b>+1 °C</b><span data-i18n="h.luna-f2">core temperature, over about 2.5 months</span></li>
+            <li><b data-i18n="h.luna-f3b">~6 h</b><span data-i18n="h.luna-f3">of sleep per night on the ISS</span></li>
+          </ul>
+          <p class="luna__src" data-i18n="h.luna-src">Effects measured by NASA studies on the ISS: Norsk 2015, Stahn 2017, Barger 2014. Not trained on individual astronaut data, which is not public.</p>
+          <a class="btn btn--luna" href="/luna/" data-i18n="h.luna-cta">Try Luna AI with your numbers</a>
+        </div>
+        <div class="luna__demo" aria-live="polite">
+          <div class="luna__head"><span data-i18n="h.luna-who">Vega Mar · on Earth</span><b class="luna__day"><span data-i18n="h.luna-day">Mission day</span> <output id="lunaDay">30</output></b></div>
+          <input type="range" min="0" max="180" value="30" id="lunaRange" aria-label="Mission day" data-i18n-aria-label="a.luna-range" />
+          <div class="luna__rows" id="lunaRows"></div>
+          <p class="luna__ctx" id="lunaCtx"></p>
         </div>
       </div>
     </section>

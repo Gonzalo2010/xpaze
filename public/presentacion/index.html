@@ -247,6 +247,8 @@ kbd{font-family:inherit;font-size:.82em;font-weight:600;border:1px solid var(--l
 .cols li svg{width:1rem;height:1rem;margin-top:.12em;color:var(--c)}
 .cols .done{--c:var(--ok)} .cols .done li{color:var(--ink)}
 .cols .dev{--c:var(--sky)} .cols .lim{--c:var(--warn)}
+.luna{color:#5b5bd6;font-weight:700;letter-spacing:-.01em}
+.cols .luna-li{color:var(--ink)}
 .stack7{display:grid;gap:clamp(.7rem,2vh,1.2rem);align-content:start;min-width:0}
 .astro7{position:relative;min-height:clamp(170px,30vh,340px);align-self:stretch;overflow:hidden;border-radius:16px}
 .astro7{-webkit-mask-image:linear-gradient(#000 78%,transparent);mask-image:linear-gradient(#000 78%,transparent)}
@@ -590,7 +592,7 @@ body:not(.proto-ok) .if-proto,body.proto-ok .if-noproto{display:none!important}
       </div>
       <div class="key" data-a>
         <svg class="draw" viewBox="0 0 64 64" aria-hidden="true"><path d="M4 26h56M4 40h56" pathLength="1" stroke-dasharray="1"/><path d="M6 33c8-3 11 3 17 0s9-3 14 0 11 1 21-3" pathLength="1"/></svg>
-        <h3 data-en="Key: personal baseline">La clave: línea base</h3><p data-en="Median + MAD, EWMA and Isolation Forest. NASA’s fixed limits stay as a safety net.">Mediana + MAD, EWMA e Isolation Forest. Los límites fijos de la NASA siguen como red de seguridad.</p>
+        <h3 data-en="Key: personal baseline">La clave: línea base</h3><p data-en="Median + MAD, EWMA and Isolation Forest. <b class=&quot;luna&quot;>Luna AI</b> predicts how that baseline will shift in space.">Mediana + MAD, EWMA e Isolation Forest. <b class="luna">Luna AI</b> predice cómo cambiará en el espacio.</p>
       </div>
     </div>
     <p class="tlh" data-a data-en="The traffic light, with a real example">El semáforo, con un ejemplo real</p>
@@ -720,7 +722,7 @@ body:not(.proto-ok) .if-proto,body.proto-ok .if-noproto{display:none!important}
       <div data-a><h3>JPL Horizons</h3><p data-en="Official solar system ephemerides (NASA/JPL). It checks the Earth–Mars delay our website calculates: 11.0 minutes on 14 Nov 2026, and it matches.">Efemérides oficiales del sistema solar (NASA/JPL). Comprueba el retardo Tierra–Marte que calcula la web: 11,0 minutos el 14-11-2026, y coincide.</p><p class="nk"><a href="https://ssd.jpl.nasa.gov/horizons/" target="_blank" rel="noopener">ssd.jpl.nasa.gov/horizons</a></p></div>
     </div>
 
-    <p class="statement" data-a data-en="NASA data sets the limits and explains each risk. <span>Each astronaut’s baseline decides what is normal for them.</span>">Los datos de la NASA marcan los límites y explican cada riesgo. <span>La línea base de cada astronauta decide qué es normal para él.</span></p>
+    <p class="statement" data-a data-en="NASA data sets the limits and explains each risk. With the effects NASA measured on the ISS, <b class=&quot;luna&quot;>Luna AI</b> predicts each astronaut’s new normal in space, day by day.">Los datos de la NASA marcan los límites y explican cada riesgo. Con los efectos que la NASA midió en la ISS, <b class="luna">Luna AI</b> predice la nueva normal de cada astronauta en el espacio, día a día.</p>
   </div>
 </section>
 
@@ -771,6 +773,7 @@ body:not(.proto-ok) .if-proto,body.proto-ok .if-noproto{display:none!important}
         <h3><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg><span data-en="Working now">Ya funciona</span></h3>
         <ul>
           <li class="if-proto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="Prototype: pulse and SpO₂, cabin, ID card">Prototipo: pulso y SpO₂, cabina y tarjeta</span></li>
+          <li class="luna-li"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="<b class=&quot;luna&quot;>Luna AI</b>: predicts how the body adapts to space"><b class="luna">Luna AI</b>: predice cómo se adapta el cuerpo al espacio</span></li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="App with history and traffic light">App con historial y semáforo</span></li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="Personal baseline computed locally">Línea base personal, calculada en local</span></li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="Real Galaxy Watch data via XPaze Link">Galaxy Watch real con XPaze Link</span></li>
