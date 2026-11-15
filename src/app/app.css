@@ -510,3 +510,12 @@ body.has-tabs .screen { padding-bottom: calc(96px + env(safe-area-inset-bottom))
 .sm-ok { background: var(--green-soft); color: var(--green-ink); } .sm-warn { background: var(--amber-soft); color: var(--amber); }
 .smodel__c { margin: 0 0 8px; padding-left: 1.1em; font-size: 13px; color: var(--ink-2); } .smodel__c li { list-style: disc; margin: 3px 0; }
 .smodel__go { display: inline-block; margin: 0 0 8px; font-weight: 600; font-size: 14px; color: #070B16; text-decoration-color: #FFB547; text-decoration-thickness: 2px; }
+
+/* orbe de Paze sin WebGL: esfera viva hecha con CSS (misma paleta que el orbe real) */
+.orb-fallback { position: relative; }
+.orb-fallback::before, .orb-fallback::after { content: ""; position: absolute; left: 50%; top: 50%; border-radius: 50%; transform: translate(-50%, -50%); }
+.orb-fallback::before { width: 62%; aspect-ratio: 1; background: radial-gradient(circle at 34% 30%, #ffffff 0%, #a8ecff 18%, #5ef0ff 34%, #17b8ff 58%, #2f7bff 78%, #1b3fa8 100%);
+  box-shadow: 0 0 40px 6px rgba(47, 123, 255, .45), inset -8px -12px 30px rgba(10, 30, 120, .45); animation: orbfb 4.5s ease-in-out infinite; }
+.orb-fallback::after { width: 84%; aspect-ratio: 1; border: 2px solid rgba(94, 240, 255, .35); animation: orbring 3s ease-out infinite; }
+@keyframes orbfb { 50% { transform: translate(-50%, -50%) scale(1.06); filter: hue-rotate(-12deg); } }
+@keyframes orbring { 0% { transform: translate(-50%, -50%) scale(.75); opacity: .9; } 100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0; } }

@@ -15,7 +15,11 @@ export const PAZE_PRESETS = {
 };
 
 const VS = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}';
-const FS = `precision highp float;
+const FS = `#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
 uniform vec2 uRes;uniform float uTime,uAmp,uBreath,uHeart,uEnergy,uRipple,uSize;uniform vec3 uA,uB,uC;uniform vec2 uMouse;
 float hash(vec3 p){p=fract(p*0.3183099+0.1);p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
 float noise(vec3 x){vec3 i=floor(x),f=fract(x);f=f*f*(3.0-2.0*f);
@@ -63,14 +67,17 @@ export class PazeOrb {
     host.appendChild(cv);
     this.cv = cv;
     let gl = null;
-    try { gl = cv.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: true }); } catch { /* sin WebGL */ }
+    for (const [name, opts] of [['webgl', { alpha: true, premultipliedAlpha: true, antialias: true }], ['webgl', { alpha: true, premultipliedAlpha: true }], ['experimental-webgl', { alpha: true, premultipliedAlpha: true }]]) {
+      try { gl = cv.getContext(name, opts); } catch { gl = null; }
+      if (gl) break;
+    }
     if (gl) {
       const mk = (type, src) => { const sh = gl.createShader(type); gl.shaderSource(sh, src); gl.compileShader(sh); return sh; };
       const prog = gl.createProgram();
       gl.attachShader(prog, mk(gl.VERTEX_SHADER, VS));
       gl.attachShader(prog, mk(gl.FRAGMENT_SHADER, FS));
       gl.linkProgram(prog);
-      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) gl = null;
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { console.warn('[orbe] no compila:', gl.getProgramInfoLog(prog)); gl = null; }
       else {
         gl.useProgram(prog);
         gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
@@ -165,7 +172,7 @@ export class PazeOrb {
     this.breathFn = null;
   }
 
-  destroy() { this.stop(); this.ro?.disconnect(); this.cv?.remove(); }
+  destroy() { this.stop(); this.ro?.disconnect(); try { this.gl?.getExtension('WEBGL_lose_context')?.loseContext(); } catch { /* nada */ } this.gl = null; this.cv?.remove(); }
 }
 
 // Estados de la sesión de voz (voice.js) → estado de ánimo de Paze.
