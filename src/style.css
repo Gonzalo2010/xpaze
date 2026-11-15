@@ -636,40 +636,41 @@ h3 { font-size: clamp(1.6rem, 1.1rem + 1.8vw, 2.6rem); font-weight: 720; line-he
 @media (max-width: 520px) { .hm__vals { grid-template-columns: 1fr 1fr; } .hm__ecg { height: 130px; } }
 
 /* ------------------------------------------------------------------ Luna AI -- */
-.nav-luna { color: #5b5bd6 !important; font-weight: 650; }
-.hero__chips .chip-luna { background: #5b5bd6; color: #fff; border-color: #5b5bd6; }
+/* marca: luna con curva de predicción · azul noche #070B16, luna #EEF1F7, ámbar #FFB547 · Sora */
+.nav-luna { display: inline-flex !important; align-items: center; gap: 6px; color: #070B16 !important; font-weight: 650; }
+.nav-luna img { width: 16px; height: 16px; }
+.hero__chips .chip-luna { display: inline-flex; align-items: center; gap: 6px; background: #070B16; color: #EEF1F7; border-color: #070B16; font-family: "Sora", var(--font); }
+.hero__chips .chip-luna b { color: #FFB547; font-weight: 600; }
 .luna {
   margin-top: clamp(80px, 12vh, 140px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(28px, 4vw, 64px);
-  align-items: center; padding: clamp(28px, 4vw, 56px); border-radius: 32px; color: #eef0ff;
-  background: radial-gradient(70% 90% at 85% 10%, rgba(120, 120, 255, .35), transparent 60%), radial-gradient(60% 70% at 0% 100%, rgba(91, 91, 214, .4), transparent 60%), #0d0f24;
-  box-shadow: 0 40px 90px -50px rgba(40, 40, 140, .8); position: relative; overflow: hidden;
+  align-items: center; padding: clamp(28px, 4vw, 56px); border-radius: 32px; color: #EEF1F7; position: relative; overflow: hidden;
+  background: radial-gradient(60% 80% at 90% 0%, rgba(255, 181, 71, .14), transparent 60%), radial-gradient(70% 70% at 0% 100%, rgba(80, 100, 160, .28), transparent 60%), #070B16;
+  box-shadow: 0 40px 90px -50px rgba(7, 11, 22, .9);
 }
-.luna::before { content: ""; position: absolute; right: -90px; top: -90px; width: 260px; height: 260px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #fff, #cfd2ff 40%, #8f93e8 70%, transparent 71%); opacity: .18; }
-.luna__k { display: flex; align-items: center; gap: 10px; margin: 0; font: 500 12px var(--mono, monospace); letter-spacing: .12em; text-transform: uppercase; color: #a9adff; }
-.luna__moon { width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff, #b9bcff); box-shadow: 0 0 14px #a9adff; }
-.luna__t { margin: 10px 0 14px; font-size: clamp(3rem, 2rem + 4vw, 5.6rem); line-height: .9; letter-spacing: -.05em; font-weight: 780;
-  background: linear-gradient(100deg, #fff 30%, #a9adff); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.luna__lead { margin: 0; font-size: clamp(1.02rem, .95rem + .3vw, 1.2rem); line-height: 1.55; color: #cdd0f5; max-width: 52ch; }
+.luna__brand { display: flex; align-items: center; gap: clamp(14px, 2vw, 22px); margin-bottom: 18px; }
+.luna__mark { width: clamp(64px, 6vw, 96px); height: auto; flex: none; filter: drop-shadow(0 0 24px rgba(238, 241, 247, .25)); }
+.luna__t { margin: 0; font-family: "Sora", var(--font); font-weight: 600; font-size: clamp(2.8rem, 1.8rem + 3.6vw, 5rem); line-height: 1; letter-spacing: -.045em; color: #EEF1F7; }
+.luna__t span { color: #FFB547; }
+.luna__k { margin: 8px 0 0; font: 500 12px "Sora", var(--font); letter-spacing: .28em; text-transform: uppercase; color: #A9B3C9; }
+.luna__lead { margin: 0; font-size: clamp(1.02rem, .95rem + .3vw, 1.2rem); line-height: 1.55; color: #C9D0E0; max-width: 52ch; }
 .luna__facts { list-style: none; margin: 24px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.luna__facts li { padding: 12px 14px; border-radius: 16px; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .1); }
-.luna__facts b { display: block; font-size: 1.35rem; letter-spacing: -.03em; color: #fff; }
-.luna__facts span { display: block; font-size: 13px; color: #b6b9e6; line-height: 1.35; margin-top: 2px; }
-.luna__src { margin: 16px 0 22px; font-size: 12.5px; color: #9093c4; }
-.btn--luna { background: #fff; color: #0d0f24; border-color: #fff; }
-.luna__demo { padding: 20px; border-radius: 24px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .12); backdrop-filter: blur(8px); }
-.luna__head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; color: #b6b9e6; }
-.luna__day { color: #fff; font-size: 15px; } .luna__day output { font-size: 1.6rem; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
-#lunaRange { width: 100%; margin: 12px 0 14px; accent-color: #a9adff; }
-.lr { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 10px 0; border-top: 1px solid rgba(255, 255, 255, .08); }
-.lr__n b { display: block; font-size: 14px; color: #fff; font-weight: 600; } .lr__n small { font-size: 12px; color: #9093c4; }
-.lr__bar { position: relative; height: 8px; border-radius: 8px; background: rgba(255, 255, 255, .08); }
-.lr__band { position: absolute; top: 0; bottom: 0; border-radius: 8px; background: rgba(169, 173, 255, .35); transition: left .25s, right .25s; }
-.lr__earth { position: absolute; left: 50%; top: -4px; bottom: -4px; width: 2px; background: rgba(255, 255, 255, .45); }
-.lr__dot { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fff; box-shadow: 0 0 12px #a9adff; transition: left .25s; }
-.lr__v { text-align: right; font-variant-numeric: tabular-nums; min-width: 92px; } .lr__v b { font-size: 1.15rem; color: #fff; }
+.luna__facts li { padding: 12px 14px; border-radius: 16px; background: rgba(238, 241, 247, .05); border: 1px solid rgba(238, 241, 247, .1); }
+.luna__facts b { display: block; white-space: nowrap; font-family: "Sora", var(--font); font-weight: 600; font-size: clamp(1.05rem, .9rem + .5vw, 1.35rem); letter-spacing: -.03em; color: #FFB547; }
+.luna__facts span { display: block; font-size: 13px; color: #A9B3C9; line-height: 1.35; margin-top: 2px; }
+.luna__src { margin: 16px 0 22px; font-size: 12.5px; color: #8A94AB; }
+.btn--luna { background: #FFB547; color: #070B16; border-color: #FFB547; }
+.luna__demo { padding: 20px; border-radius: 24px; background: rgba(238, 241, 247, .04); border: 1px solid rgba(238, 241, 247, .1); }
+.luna__head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; color: #A9B3C9; }
+.luna__day { color: #EEF1F7; font-size: 15px; } .luna__day output { font-family: "Sora", var(--font); font-size: 1.6rem; letter-spacing: -.03em; font-variant-numeric: tabular-nums; color: #FFB547; }
+#lunaRange { width: 100%; margin: 12px 0 14px; accent-color: #FFB547; }
+.lr { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 10px 0; border-top: 1px solid rgba(238, 241, 247, .08); }
+.lr__n b { display: block; font-size: 14px; color: #EEF1F7; font-weight: 600; } .lr__n small { font-size: 12px; color: #8A94AB; }
+.lr__bar { position: relative; height: 8px; border-radius: 8px; background: rgba(238, 241, 247, .08); }
+.lr__band { position: absolute; top: 0; bottom: 0; border-radius: 8px; background: rgba(255, 181, 71, .32); transition: left .25s, right .25s; }
+.lr__earth { position: absolute; left: 50%; top: -4px; bottom: -4px; width: 2px; background: rgba(238, 241, 247, .45); }
+.lr__dot { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #EEF1F7; box-shadow: 0 0 12px rgba(255, 181, 71, .8); transition: left .25s; }
+.lr__v { text-align: right; font-variant-numeric: tabular-nums; min-width: 92px; } .lr__v b { font-family: "Sora", var(--font); font-size: 1.15rem; color: #EEF1F7; }
 .lr__v em { font-style: normal; font-size: 12px; font-weight: 700; padding: 2px 7px; border-radius: 999px; margin-left: 4px; }
-.lr__v .dn { background: rgba(96, 165, 250, .2); color: #93c5fd; } .lr__v .up { background: rgba(251, 191, 36, .18); color: #fcd34d; } .lr__v .z { background: rgba(74, 222, 128, .16); color: #86efac; }
-.luna__ctx { margin: 12px 0 0; min-height: 1.4em; font-size: 13px; color: #b6b9e6; line-height: 1.45; }
+.lr__v .dn { background: rgba(96, 165, 250, .2); color: #93c5fd; } .lr__v .up { background: rgba(255, 181, 71, .2); color: #FFB547; } .lr__v .z { background: rgba(74, 222, 128, .16); color: #86efac; }
+.luna__ctx { margin: 12px 0 0; min-height: 1.4em; font-size: 13px; color: #A9B3C9; line-height: 1.45; }
 @media (max-width: 900px) { .luna { grid-template-columns: 1fr; } .luna__facts { grid-template-columns: 1fr; } }
-.luna__facts b { white-space: nowrap; font-size: clamp(1.05rem, .9rem + .5vw, 1.35rem); }

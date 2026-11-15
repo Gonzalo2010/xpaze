@@ -69,8 +69,7 @@ function render() {
   <header class="lt"><a href="/" class="lt__b"><img src="/logo-mark-dark.png" alt="" width="28" height="23"/>XPaze</a>
     <div class="lt__l"><button data-l="en" aria-pressed="${lang === 'en'}">EN</button><button data-l="es" aria-pressed="${lang === 'es'}">ES</button></div></header>
   <section class="lh">
-    <p class="lk">${L('Modelo de predicción', 'Prediction model')}</p>
-    <h1>Luna AI</h1>
+    <div class="lbrand"><img src="/luna-badge.svg" alt="" width="88" height="88"/><div><h1>Luna <span>AI</span></h1><p class="lk">${L('Modelo de predicción · XPaze', 'Prediction model · XPaze')}</p></div></div>
     <p class="ll">${L('Con cómo está cada astronauta en la Tierra, Luna AI predice cómo se adaptará su cuerpo al espacio día a día, y cuál será su nueva normal. En vuelo, cada chequeo corrige la predicción.', 'From how each astronaut is on Earth, Luna AI predicts how their body will adapt to space day by day, and what their new normal will be. In flight, every check-up corrects the prediction.')}</p>
   </section>
   <section class="lg">

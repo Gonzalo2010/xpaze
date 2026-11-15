@@ -1640,7 +1640,7 @@ function spaceModelCard(uid) {
   ].filter(([k]) => M.model[k]);
   const tag = { expected: [L('esperable', 'expected'), 'ok'], high: [L('por encima', 'above'), 'warn'], low: [L('por debajo', 'below'), 'warn'] };
   const ctx = contextFor(M.day);
-  return `<details class="smodel"><summary><span class="smodel__k">Luna AI · ${L('predicción', 'prediction')}</span><b>${L(`Tu cuerpo en el espacio · día ${M.day}`, `Your body in space · day ${M.day}`)}</b><small>${L('Lo que la NASA ha medido en la ISS, ajustado a ti', 'What NASA measured on the ISS, adjusted to you')}</small></summary>
+  return `<details class="smodel"><summary><span class="smodel__k"><img src="/luna-badge.svg" alt="" width="16" height="16"/>Luna AI · ${L('predicción', 'prediction')}</span><b>${L(`Tu cuerpo en el espacio · día ${M.day}`, `Your body in space · day ${M.day}`)}</b><small>${L('Lo que la NASA ha medido en la ISS, ajustado a ti', 'What NASA measured on the ISS, adjusted to you')}</small></summary>
     <table class="smodel__t"><thead><tr><th></th><th>${L('En la Tierra', 'On Earth')}</th><th>${L('Esperado hoy', 'Expected today')}</th><th>${L('Hoy', 'Today')}</th></tr></thead><tbody>
     ${rows.map(([k, n, v, d]) => { const m = M.model[k], j = judge(M.model, k, v), u = m.unit === 'bpm' ? L('lpm', 'bpm') : m.unit;
       return `<tr><th>${n}</th><td>${fmt(m.earth, d)} ${u}</td><td>${fmt(m.lo, d)}–${fmt(m.hi, d)}</td><td><b>${fmt(v, d)}</b> <span class="sm-${j ? tag[j][1] : 'off'}">${j ? tag[j][0] : ''}</span></td></tr>`; }).join('')}
