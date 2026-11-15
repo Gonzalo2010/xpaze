@@ -100,6 +100,16 @@ button{font:inherit;color:inherit}
 body.calm .dots,body.calm .tools{opacity:0;pointer-events:none}
 .tap{position:fixed;inset:0;z-index:2;background:transparent;border:0;cursor:pointer}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.mark path{stroke-dashoffset:0}}
+
+/* solo en pantalla completa: fuera de ella, la pantalla queda tapada */
+#gate{position:fixed;inset:0;z-index:99;display:none;flex-direction:column;align-items:center;justify-content:center;gap:2.4vmin;text-align:center;padding:6vmin;background:var(--bg);color:var(--ink)}
+body.nofs #gate{display:flex}
+body.nofs .view,body.nofs .dots,body.nofs .tools,body.nofs .tap{visibility:hidden}
+#gate svg.m{width:min(22vmin,180px);height:auto}
+#gate svg.m path{fill:none;stroke:var(--pulse);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+#gate h2{margin:0;font-size:min(6vmin,46px);letter-spacing:-.04em}
+#gate p{margin:0;color:var(--muted);font-size:min(2.8vmin,20px);max-width:36ch}
+#gate button{margin-top:1vmin;font:700 min(3.2vmin,24px) inherit;padding:1.1em 1.8em;border-radius:999px;border:0;background:var(--pulse);color:#fff;cursor:pointer;box-shadow:0 14px 40px -12px var(--pulse)}
 </style>
 </head>
 <body>
@@ -358,6 +368,25 @@ document.addEventListener("visibilitychange",function(){if(document.visibilitySt
 /* los controles se esconden solos para que la pantalla quede limpia */
 var calmT;function wake(){document.body.classList.remove("calm");clearTimeout(calmT);calmT=setTimeout(function(){document.body.classList.add("calm");},3500);}
 wake();
+})();
+</script>
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gateT">
+  <svg class="m" viewBox="0 0 26 16" aria-hidden="true"><path d="M1 9h6l2-5 3.5 10L15 6l1.5 3H25"/></svg>
+  <h2 id="gateT">XPaze</h2>
+  <p id="gateP">Esta pantalla solo se muestra en pantalla completa.</p>
+  <button type="button" id="gateBtn">Entrar en pantalla completa</button>
+</div>
+<script>
+(function(){
+  var root=document.documentElement,btn=document.getElementById("gateBtn"),msg=document.getElementById("gateP");
+  var can=!!(root.requestFullscreen||root.webkitRequestFullscreen);
+  function isFull(){return !!(document.fullscreenElement||document.webkitFullscreenElement)||matchMedia("(display-mode: fullscreen)").matches||matchMedia("(display-mode: standalone)").matches;}
+  function check(){document.body.classList.toggle("nofs",!isFull());}
+  if(!can){msg.textContent="Este navegador no permite pantalla completa. Ábrelo en Chrome, o añádelo a la pantalla de inicio y ábrelo desde ahí.";btn.style.display="none";}
+  btn.addEventListener("click",function(){try{var r=(root.requestFullscreen||root.webkitRequestFullscreen).call(root);if(r&&r.catch)r.catch(function(){});}catch(e){}});
+  ["fullscreenchange","webkitfullscreenchange"].forEach(function(ev){document.addEventListener(ev,check);});
+  addEventListener("resize",check);
+  check();
 })();
 </script>
 </body>

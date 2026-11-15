@@ -1,4 +1,4 @@
-// Modelo de adaptación al espacio: a partir de la línea base de cada persona en la Tierra,
+// Luna AI · modelo de adaptación al espacio: a partir de la línea base de cada persona en la Tierra,
 // predice cómo se moverá cada constante al llegar al espacio y durante la misión, con su margen.
 // Después, las medidas reales en vuelo corrigen la predicción (actualización bayesiana).
 //

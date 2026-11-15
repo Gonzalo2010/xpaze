@@ -17,6 +17,7 @@ export default defineConfig({
         app: resolve(import.meta.dirname, 'app/index.html'),
         legal: resolve(import.meta.dirname, 'legal/index.html'),
         astronaut: resolve(import.meta.dirname, 'astronaut/index.html'),
+        luna: resolve(import.meta.dirname, 'luna/index.html'),
       },
     },
   },

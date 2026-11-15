@@ -74,7 +74,7 @@ export function seedPreflight(uid, storyKey, now = Date.now()) {
   return Array.from({ length: 10 }, (_, i) => ({
     at: launch - (60 - i * 6) * DAY, phase: 'preflight',
     bpm: Math.round(b.hr + n(1.6)), bp: { sys: Math.round(b.sys + 8 + n(4)), dia: Math.round(b.dia + 9 + n(3)) },
-    temp: Math.round((b.temp - 0.75 + n(0.08)) * 10) / 10, mind: { sleep: Math.round((7.1 + n(0.35)) * 2) / 2 },
+    temp: Math.round((b.temp + n(0.08)) * 10) / 10, mind: { sleep: Math.round((7.1 + n(0.35)) * 2) / 2 },
   }));
 }
 
