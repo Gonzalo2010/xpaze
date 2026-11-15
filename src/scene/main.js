@@ -35,7 +35,10 @@ const STEPS = [
 
 /* ------------------------------------------------------------- renderer -- */
 const canvas = $('#scene');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+const EMBED = params.has('embed');
+if (EMBED) document.documentElement.classList.add('embed');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: EMBED, powerPreference: 'high-performance' });
+if (EMBED) renderer.setClearColor(0x000000, 0);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 3)); // nitidez máxima razonable
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 0.78;
@@ -43,7 +46,7 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color('#03050a');
+scene.background = EMBED ? null : new THREE.Color('#03050a');
 const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 4000);
 
 // entorno para los reflejos (el visor dorado): paneles de luz en una sala oscura
@@ -99,7 +102,7 @@ scene.add(screenLight);
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   g.setAttribute('color', new THREE.BufferAttribute(col, 3));
-  scene.add(new THREE.Points(g, new THREE.PointsMaterial({ size: 2.2, sizeAttenuation: false, vertexColors: true, transparent: true, opacity: 0.9 })));
+  if (!EMBED) scene.add(new THREE.Points(g, new THREE.PointsMaterial({ size: 2.2, sizeAttenuation: false, vertexColors: true, transparent: true, opacity: 0.9 })));
 }
 
 // la Tierra: un limbo enorme bajo la escena, con nubes procedurales y atmósfera
@@ -139,7 +142,7 @@ const earth = new THREE.Group();
   earth.userData.surf = surf;
   earth.position.set(-120, -960, -260);
   earth.rotation.set(0.4, 0, 0.25);
-  scene.add(earth);
+  if (!EMBED) scene.add(earth);
 }
 
 /* ------------------------------------------------- estación y astronauta -- */
@@ -236,7 +239,8 @@ function setCaption(text, n) {
 function frame(now) {
   const dt = Math.min(0.05, (now - last) / 1000);
   last = now;
-  const t = freeze ?? (now - t0) / 1000;
+  let t = freeze ?? (now - t0) / 1000;
+  if (EMBED && freeze == null && t > T.end) { t0 = now; t = 0; lastStep = -1; lastPhase = ''; shown = 0; } // en bucle
   const wall = now / 1000;
 
   /* --- acto 1: la estación se abre y se cierra --- */
@@ -268,7 +272,7 @@ function frame(now) {
 
   /* --- cámara --- */
   const far = Math.max(1, 1.05 / aspect); // en vertical, la cámara se aleja para que quepa
-  const tall = aspect < 0.9 ? 1 : 0;      // y el sujeto sube a la mitad de arriba (abajo va el panel)
+  const tall = aspect < 0.9 && !EMBED ? 1 : 0; // y el sujeto sube a la mitad de arriba (abajo va el panel)
   A1.set(Math.sin(wall * 0.12) * 1.0, 0.45, 6.0).multiplyScalar(1 + (far - 1) * 0.9);
   const orbit = span(t, T.grab, T.end);
   A2.set(mix(18, 22, ease(orbit)), mix(2.4, 5.2, ease(orbit)), mix(-9, 0.5, ease(orbit))).multiplyScalar(far);
@@ -319,7 +323,7 @@ function frame(now) {
   if (hudTitle.textContent !== title) hudTitle.textContent = title;
   fin.classList.toggle('is-on', t >= T.done + 2.2);
 
-  composer.render();
+  if (EMBED) renderer.render(scene, camera); else composer.render();
   requestAnimationFrame(frame);
 }
 

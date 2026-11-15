@@ -245,6 +245,10 @@ kbd{font-family:inherit;font-size:.82em;font-weight:600;border:1px solid var(--l
 .cols li svg{width:1rem;height:1rem;margin-top:.12em;color:var(--c)}
 .cols .done{--c:var(--ok)} .cols .done li{color:var(--ink)}
 .cols .dev{--c:var(--sky)} .cols .lim{--c:var(--warn)}
+.stack7{display:grid;gap:clamp(.7rem,2vh,1.2rem);align-content:start;min-width:0}
+.astro7{position:relative;min-height:clamp(170px,30vh,340px);align-self:stretch}
+.astro7 iframe{position:absolute;inset:-6% -4%;width:108%;height:112%;border:0;background:transparent;pointer-events:none}
+@media (max-width:900px){.astro7{min-height:260px}}
 .closer{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.6fr) auto;gap:clamp(1rem,3vw,2.6rem);align-items:center;margin-top:clamp(1.1rem,3vh,2rem);padding-top:clamp(1rem,2.6vh,1.6rem);border-top:1px solid var(--line2)}
 .next{border-left:2px solid var(--accent);padding-left:1rem}
 .next b{display:block;color:var(--accent);font-size:.9em;margin-bottom:.2rem}
@@ -762,6 +766,7 @@ body:not(.proto-ok) .if-proto,body.proto-ok .if-noproto{display:none!important}
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span data-en="Demo with 4 astronauts and xpaze.es">Demo con 4 astronautas y xpaze.es</span></li>
         </ul>
       </div>
+      <div class="stack7">
       <div class="dev" data-a>
         <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg><span data-en="In progress">En desarrollo</span></h3>
         <ul>
@@ -779,6 +784,8 @@ body:not(.proto-ok) .if-proto,body.proto-ok .if-noproto{display:none!important}
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span data-en="Medical decisions are made by doctors">Las decisiones médicas las toman los médicos</span></li>
         </ul>
       </div>
+      </div>
+      <div class="astro7" data-a aria-hidden="true"><iframe id="astroFrame" title="" tabindex="-1" scrolling="no" allowtransparency="true"></iframe></div>
     </div>
     <div class="closer">
       <div class="next" data-a><b data-en="Next step">Siguiente paso</b><p data-en="Run Paze fully offline, add ECG to the station and test XPaze in a real mission analogue.">Paze en local y sin conexión, ECG en la estación y una prueba en un análogo de misión real.</p></div>
@@ -1064,7 +1071,7 @@ document.querySelectorAll("svg.mini").forEach(function(svg){
 var hooks={
   inicio:{enter:function(){ecgHero.start();},leave:function(){ecgHero.stop();}},
   mente:{enter:function(){orbPaze.setMood("escucha");orbPaze.start();},leave:function(){orbPaze.stop();}},
-  hoy:{enter:function(){var lis=[].slice.call(document.querySelectorAll("#ssteps li")),f=document.getElementById("sfill");
+  hoy:{leave:function(){var f=document.getElementById("astroFrame");if(f)f.removeAttribute("src");},enter:function(){var af=document.getElementById("astroFrame");if(af&&!af.getAttribute("src"))af.src="/astronaut/?embed=1&lang="+lang;var lis=[].slice.call(document.querySelectorAll("#ssteps li")),f=document.getElementById("sfill");
     lis.forEach(function(l){l.classList.remove("on");});f.style.width="0";
     lis.forEach(function(l,i){later(function(){l.classList.add("on");f.style.width=(i===lis.length-1?100:(l.offsetLeft+8)/l.parentElement.offsetWidth*100)+"%";},RM?0:1400+i*650);});}}
 };

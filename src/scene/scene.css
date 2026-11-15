@@ -54,3 +54,7 @@ html, body { margin: 0; height: 100%; background: #03050a; color: #fff; font-fam
   .fin.is-on { transform: translate(50%, 0); }
   .hud__note { display: none; }
 }
+
+/* modo incrustado (?embed=1): solo la escena, sin fondo */
+html.embed, html.embed body { background: transparent; }
+html.embed .top, html.embed .cap, html.embed .hud, html.embed .fin, html.embed .loading { display: none !important; }
