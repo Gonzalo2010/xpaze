@@ -1121,11 +1121,10 @@ function go(i,fromHash){
 /* ajuste a pantalla: ninguna diapositiva se desborda ni se monta con la barra */
 function fit(s){
   s=s||slides[cur];if(!s)return;var inner=s.querySelector(".inner");
-  inner.style.transform="";inner.style.width="";s.classList.remove("fit");
+  inner.style.transform="";s.classList.remove("fit");
   var cs=getComputedStyle(s),avail=s.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
   var need=inner.scrollHeight;
-  if(need>avail+1){var k=Math.max(.5,avail/need);s.classList.add("fit");inner.style.width=(100/k)+"%";inner.style.marginLeft=((1-1/k)*50)+"%";inner.style.transform="scale("+k+")";}
-  else{inner.style.marginLeft="";}
+  if(need>avail+1&&innerWidth>=700){var k=Math.max(.45,avail/need);s.classList.add("fit");inner.style.transform="scale("+k+")";}
 }
 addEventListener("resize",function(){fit();});
 function updateChrome(){

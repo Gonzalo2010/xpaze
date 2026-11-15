@@ -6,7 +6,8 @@ import './app.css';
 import { BleLink, SimLink, WifiLink, bluetoothAvailable, wifiAvailable } from './link.js';
 import { MEASURES, ENVIRONMENTS, PHQ2, PHQ2_ANSWERS, RED_FLAGS, SELF_HARM, isSelfHarm, classify, actionPlan, cabinLevel, co2Level } from './clinical.js';
 import { baselineBand, baselineChart, drawEcg } from './charts.js';
-import { seedStory, storyBody, trendInsights, resultsFromEntry, reportText, SEED_VERSION } from './story.js';
+import { seedStory, storyBody, seedPreflight, MISSION_DAY, trendInsights, resultsFromEntry, reportText, SEED_VERSION } from './story.js';
+import { predict, update, judge, contextFor, EFFECTS } from './adapt.js';
 import { streamAI } from './ai.js';
 import { PazeOrb, bindOrbToVoice } from './paze-orb.js';
 import { assessSpace } from './space.js';
@@ -216,6 +217,7 @@ function home() {
       </button>
 
       ${changesCard(p.uid, 3)}
+      ${spaceModelCard(p.uid)}
       ${S.link?.kind === 'sim' ? `<div class="scenrow"><span>${L('Simulación de hoy', 'Today’s simulation')}</span><div class="seg seg--scroll">${SIM_SCENARIOS.map(([k]) => `<button data-sim-prof="${k}" class="${S.link?.scenario === k ? 'is-on' : ''}">${SCEN_NAME(k)}</button>`).join('')}</div><p class="fine" data-live="scen">${SCEN_DESC(S.link?.scenario || 'rest')}</p></div>` : ''}
       <div class="minor">
         <button class="mini" data-act="datos">${icon('sim')}<span>${L('Mis datos en directo', 'My live data')}</span></button>
@@ -1612,6 +1614,41 @@ function seedAll() {
     saved.seedV = SEED_VERSION;
   }
   PEOPLE.forEach((p) => seedHistory(p.uid));
+}
+
+// «Tu cuerpo en el espacio»: el modelo de adaptación predice, con la línea base en la Tierra, la nueva
+// normal de cada constante este día de misión, y las medidas en vuelo corrigen la predicción.
+function spaceModel(uid) {
+  const crew = crewByUid[uid];
+  if (!crew) return null;
+  const pre = seedPreflight(uid, crew.id);
+  const flight = (saved.history[uid] || []).slice().sort((a, b) => a.at - b.at);
+  if (!flight.length) return null;
+  const last = flight.at(-1);
+  const day = MISSION_DAY;
+  const prior = predict(pre, day);
+  const model = update(prior, flight.slice(0, -1).slice(-14));
+  return { pre, flight, last, day, prior, model };
+}
+function spaceModelCard(uid) {
+  const M = spaceModel(uid);
+  if (!M) return '';
+  const rows = [
+    ['sys', L('Tensión sistólica', 'Systolic pressure'), M.last.bp?.sys, 0],
+    ['hr', L('Pulso en reposo', 'Resting heart rate'), M.last.bpm, 0],
+    ['temp', L('Temperatura', 'Temperature'), M.last.temp, 1],
+    ['sleep', L('Sueño', 'Sleep'), M.last.mind?.sleep, 1],
+  ].filter(([k]) => M.model[k]);
+  const tag = { expected: [L('esperable', 'expected'), 'ok'], high: [L('por encima', 'above'), 'warn'], low: [L('por debajo', 'below'), 'warn'] };
+  const ctx = contextFor(M.day);
+  return `<details class="smodel"><summary><span class="smodel__k">${L('Modelo de adaptación', 'Adaptation model')}</span><b>${L(`Tu cuerpo en el espacio · día ${M.day}`, `Your body in space · day ${M.day}`)}</b><small>${L('Lo que la NASA ha medido en la ISS, ajustado a ti', 'What NASA measured on the ISS, adjusted to you')}</small></summary>
+    <table class="smodel__t"><thead><tr><th></th><th>${L('En la Tierra', 'On Earth')}</th><th>${L('Esperado hoy', 'Expected today')}</th><th>${L('Hoy', 'Today')}</th></tr></thead><tbody>
+    ${rows.map(([k, n, v, d]) => { const m = M.model[k], j = judge(M.model, k, v), u = m.unit === 'bpm' ? L('lpm', 'bpm') : m.unit;
+      return `<tr><th>${n}</th><td>${fmt(m.earth, d)} ${u}</td><td>${fmt(m.lo, d)}–${fmt(m.hi, d)}</td><td><b>${fmt(v, d)}</b> <span class="sm-${j ? tag[j][1] : 'off'}">${j ? tag[j][0] : ''}</span></td></tr>`; }).join('')}
+    </tbody></table>
+    ${ctx.length ? `<ul class="smodel__c">${ctx.map((c) => `<li>${esc(L(c.es, c.en))}</li>`).join('')}</ul>` : ''}
+    <p class="fine">${L('Predicción con los efectos medios publicados (Norsk 2015, Stahn 2017, Barger 2014) y tu línea base en la Tierra; tus chequeos en vuelo la van corrigiendo. No está entrenado con datos individuales de astronautas, que no son públicos.', 'Prediction from published average effects (Norsk 2015, Stahn 2017, Barger 2014) and your baseline on Earth; your in-flight check-ups keep correcting it. It is not trained on individual astronaut data, which is not public.')}</p>
+  </details>`;
 }
 
 // Tarjeta «Qué ha cambiado»: tendencias frente a tu normal (reglas fijas, sin IA).

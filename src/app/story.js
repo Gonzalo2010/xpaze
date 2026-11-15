@@ -63,6 +63,21 @@ export function seedStory(uid, storyKey, now = Date.now(), env = 'transit') {
   return out;
 }
 
+/** Día de misión de la historia simulada (hoy) y chequeos en la Tierra antes del despegue. */
+export const MISSION_DAY = 58;
+export function seedPreflight(uid, storyKey, now = Date.now()) {
+  const b = STORIES[storyKey] || STORIES.default;
+  const rnd = rng(uid.split('').reduce((a, c) => a * 29 + c.charCodeAt(0), 11));
+  const n = (sd) => (rnd() + rnd() + rnd() - 1.5) * sd * 1.7;
+  const launch = now - MISSION_DAY * DAY;
+  // en la Tierra, antes de la adaptación: tensión algo más alta, temperatura de partida y sueño de entrenamiento
+  return Array.from({ length: 10 }, (_, i) => ({
+    at: launch - (60 - i * 6) * DAY, phase: 'preflight',
+    bpm: Math.round(b.hr + n(1.6)), bp: { sys: Math.round(b.sys + 8 + n(4)), dia: Math.round(b.dia + 9 + n(3)) },
+    temp: Math.round((b.temp - 0.75 + n(0.08)) * 10) / 10, mind: { sleep: Math.round((7.1 + n(0.35)) * 2) / 2 },
+  }));
+}
+
 /** Recalcula el semáforo de un chequeo guardado (mismas reglas fijas que el chequeo). */
 export function resultsFromEntry(e) {
   const r = [];
