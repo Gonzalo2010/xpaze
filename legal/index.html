@@ -42,7 +42,7 @@
 
       <h3>What data is processed, why and where</h3>
       <div class="lg-cards">
-        <article><h4>Visiting the website</h4><p>Your IP address and technical connection data are processed by <b>Cloudflare</b>, the network that delivers the site and protects it from attacks. <b>Our server keeps no visit logs.</b> There is no analytics and no advertising, and fonts and libraries are served from xpaze.es itself (no Google Fonts).</p><p class="lg-basis">Legal basis: legitimate interest in providing a secure website (Art. 6.1.f GDPR).</p></article>
+        <article><h4>Visiting the website</h4><p>The website is served directly from our server, hosted by <b>Contabo</b> in the European Union. Your IP address is used only to deliver each page and is not stored: <b>our server keeps no visit logs.</b> Cloudflare only provides the domain's DNS and does not see your visit. There is no analytics and no advertising, and fonts and libraries are served from xpaze.es itself (no Google Fonts).</p><p class="lg-basis">Legal basis: legitimate interest in providing a secure website (Art. 6.1.f GDPR).</p></article>
         <article><h4>On your device</h4><p>Check-up history, chosen profile, language, Paze's memory (session summaries and learned facts), "About me", your medical history and watch pairing codes are stored <b>only in your browser</b> (local storage). We do not receive them, except as described under "AI features". You can delete them in the app ("Clear history", "Forget everything") or by clearing this site's data in your browser.</p><p class="lg-basis">Legal basis: features you request (Art. 6.1.a and 6.1.b GDPR).</p></article>
         <article><h4>AI features</h4><p>When you ask for a check-up explanation or talk to Paze, our server sends the AI your message and the context it needs: measurements, history and, <b>if you have written them</b>, your medical history and "About me". Providers:</p><ul><li><b>Anthropic</b> (Claude): text conversations and explanations.</li><li><b>OpenAI</b>: live voice. The audio goes directly from your browser to OpenAI with a short-lived key issued by our server.</li></ul><p><b>Our server does not store conversations.</b> The providers process them under their API terms: by default they are not used to train models, and they may be kept for a limited time for security. Both companies are based in the United States; the transfer relies on the safeguards of Chapter V GDPR offered by these providers.</p><p class="lg-basis">Legal basis: your consent when you use the feature (Art. 6.1.a GDPR) and, if you enter real health data, your explicit consent (Art. 9.2.a GDPR). <b>Our advice: use the simulated profiles and do not write real health data you do not want to share.</b></p></article>
         <article><h4>Abuse limits</h4><p>To prevent abuse of the AI, the server keeps in memory, for 10 minutes, a count of requests per IP address. It is never written to disk.</p><p class="lg-basis">Legal basis: legitimate interest (Art. 6.1.f GDPR).</p></article>
@@ -52,7 +52,7 @@
 
       <h3>Recipients, retention and decisions</h3>
       <ul>
-        <li>Service providers acting on our behalf: Cloudflare (delivery and security), Anthropic and OpenAI (AI). <b>We never sell or share data for advertising.</b></li>
+        <li>Service providers acting on our behalf: Contabo (server hosting, EU), Anthropic and OpenAI (AI). <b>We never sell or share data for advertising.</b></li>
         <li>Retention: conversations are not stored; watch data for up to 48 h; the abuse counter for 10 min; everything else stays on your device until you delete it.</li>
         <li>No decision with legal or similarly significant effects is made automatically. The traffic light is guidance for the person and their medical team.</li>
       </ul>
@@ -76,7 +76,6 @@
           <tr><td><code>xpaze-app-v2</code></td><td>Cache (service worker)</td><td>Lets the app open without a connection</td><td>Until the next version</td></tr>
         </tbody>
       </table>
-      <p>Cloudflare may set strictly necessary technical cookies for security (for example, to tell people from bots).</p>
     </section>
 
     <section id="terms">
@@ -144,7 +143,7 @@
 
       <h3>Qué datos se tratan, para qué y dónde</h3>
       <div class="lg-cards">
-        <article><h4>Al visitar la web</h4><p>Tu dirección IP y los datos técnicos de la conexión los trata <b>Cloudflare</b>, la red que entrega la web y la protege de ataques. <b>Nuestro servidor no guarda registros de visitas.</b> No hay analítica ni publicidad, y las fuentes y librerías se sirven desde el propio xpaze.es (sin Google Fonts).</p><p class="lg-basis">Base legal: interés legítimo en ofrecer una web segura (art. 6.1.f RGPD).</p></article>
+        <article><h4>Al visitar la web</h4><p>La web se sirve directamente desde nuestro servidor, alojado en <b>Contabo</b> dentro de la Unión Europea. Tu dirección IP solo se usa para entregar cada página y no se guarda: <b>nuestro servidor no guarda registros de visitas.</b> Cloudflare solo gestiona el DNS del dominio y no ve tu visita. No hay analítica ni publicidad, y las fuentes y librerías se sirven desde el propio xpaze.es (sin Google Fonts).</p><p class="lg-basis">Base legal: interés legítimo en ofrecer una web segura (art. 6.1.f RGPD).</p></article>
         <article><h4>En tu dispositivo</h4><p>El historial de chequeos, el perfil elegido, el idioma, la memoria de Paze (resúmenes y datos aprendidos), «Sobre mí», tu historial médico y los códigos de vinculación del reloj se guardan <b>solo en tu navegador</b> (almacenamiento local). No los recibimos, salvo lo que se explica en «Funciones con IA». Puedes borrarlos desde la app («Borrar historial», «Olvidar todo») o borrando los datos de este sitio en el navegador.</p><p class="lg-basis">Base legal: funciones que tú pides (art. 6.1.a y 6.1.b RGPD).</p></article>
         <article><h4>Funciones con IA</h4><p>Cuando pides la explicación de un chequeo o hablas con Paze, nuestro servidor envía a la IA tu mensaje y el contexto necesario: medidas, historial y, <b>si los has escrito</b>, tu historial médico y «Sobre mí». Proveedores:</p><ul><li><b>Anthropic</b> (Claude): conversación por texto y explicaciones.</li><li><b>OpenAI</b>: voz en directo. El audio va directamente de tu navegador a OpenAI con una clave temporal que emite nuestro servidor.</li></ul><p><b>Nuestro servidor no guarda las conversaciones.</b> Los proveedores las tratan según sus condiciones para la API: por defecto no se usan para entrenar modelos y pueden conservarse un tiempo limitado por seguridad. Ambas empresas están en Estados Unidos; la transferencia se ampara en las garantías del capítulo V del RGPD que ofrecen estos proveedores.</p><p class="lg-basis">Base legal: tu consentimiento al usar la función (art. 6.1.a RGPD) y, si escribes datos de salud reales, tu consentimiento explícito (art. 9.2.a RGPD). <b>Nuestra recomendación: usa los perfiles simulados y no escribas datos de salud reales que no quieras compartir.</b></p></article>
         <article><h4>Límites contra abusos</h4><p>Para evitar abusos de la IA, el servidor guarda en memoria, durante 10 minutos, un recuento de peticiones por dirección IP. Nunca se escribe en disco.</p><p class="lg-basis">Base legal: interés legítimo (art. 6.1.f RGPD).</p></article>
@@ -154,7 +153,7 @@
 
       <h3>Destinatarios, plazos y decisiones</h3>
       <ul>
-        <li>Proveedores que tratan datos por nuestra cuenta: Cloudflare (entrega y seguridad), Anthropic y OpenAI (IA). <b>Nunca vendemos datos ni los cedemos para publicidad.</b></li>
+        <li>Proveedores que tratan datos por nuestra cuenta: Contabo (alojamiento del servidor, UE), Anthropic y OpenAI (IA). <b>Nunca vendemos datos ni los cedemos para publicidad.</b></li>
         <li>Plazos: las conversaciones no se guardan; los datos del reloj, 48 h como máximo; el recuento contra abusos, 10 min; todo lo demás se queda en tu dispositivo hasta que lo borres.</li>
         <li>No se toma ninguna decisión automatizada con efectos jurídicos o similares. El semáforo es una orientación para la persona y su equipo médico.</li>
       </ul>
@@ -178,7 +177,6 @@
           <tr><td><code>xpaze-app-v2</code></td><td>Caché (service worker)</td><td>Permite abrir la app sin conexión</td><td>Hasta la siguiente versión</td></tr>
         </tbody>
       </table>
-      <p>Cloudflare puede usar cookies técnicas estrictamente necesarias para la seguridad (por ejemplo, para distinguir personas de bots).</p>
     </section>
 
     <section id="condiciones">
