@@ -6,7 +6,7 @@ Hemos usado IA de forma intensiva, tanto para **construir** XPaze como **dentro 
 
 | Herramienta | Proveedor | Para qué |
 |---|---|---|
-| **Claude Code** (modelo **Claude Opus 5.5**, con sus subagentes) | Anthropic | La mayor parte del código de este repositorio: web, app, integración del módulo Mente, servidor de IA, firmware del Arduino, puente de la Raspberry Pi, app Android y tests. También la documentación, las pruebas en navegador con capturas y el despliegue en el servidor. |
+| **Claude Code** (modelos **Claude Opus 5.5** y **Claude Fable 5.2**, con sus subagentes) | Anthropic | La mayor parte del código de este repositorio: web, app, estación simulada, escena 3D, integración del módulo Mente, servidor de IA, firmware del Arduino, puente de la Raspberry Pi, app Android y tests. También la documentación (incluidos el README y las páginas legales), las pruebas en navegador con capturas y el despliegue en el servidor. |
 | **Subagentes de investigación de Claude Code** | Anthropic | Buscar y comprobar fuentes: riesgos del HRP, NASA-STD-3001, NEWS2, ACC/AHA, ADA, PHQ-2, AASM, PVT-B, OSDR, DONKI y conjuntos de datos de apoyo emocional (ESConv, AnnoMI). Cada dato se contrastó con su fuente, y lo no verificado está marcado en [docs/medical-thresholds.md](docs/medical-thresholds.md). |
 | **OpenAI Codex** | OpenAI | La primera versión del motor psicológico de Mente (`src/demo/psych/engine/`). |
 | *[Equipo: añadid cualquier otra IA usada, por ejemplo para el logo, imágenes, diapositivas, vídeo o textos]* | | |

@@ -6,7 +6,7 @@ We used AI extensively, both to **build** XPaze and **inside the product**. This
 
 | Tool | Provider | What it was used for |
 |---|---|---|
-| **Claude Code** (model **Claude Opus 5.5**, plus its sub-agents) | Anthropic | Most of the code in this repository: website, app, Mind module integration, AI server, Arduino firmware, Raspberry Pi bridge, Android companion app and tests. It also wrote the documentation, ran the browser tests and screenshots, and handled server deployment. |
+| **Claude Code** (models **Claude Opus 5.5** and **Claude Fable 5.2**, plus its sub-agents) | Anthropic | Most of the code in this repository: website, app, simulated station, 3D scene, Mind module integration, AI server, Arduino firmware, Raspberry Pi bridge, Android companion app and tests. It also wrote the documentation (including the README and the legal pages), ran the browser tests and screenshots, and handled server deployment. |
 | **Claude Code research sub-agents** | Anthropic | Searching and checking sources: NASA HRP risk titles, NASA-STD-3001 limits, NEWS2, ACC/AHA, ADA, PHQ-2, AASM, PVT-B, NASA OSDR and DONKI, and emotional-support datasets (ESConv, AnnoMI). Each finding was checked against the cited source, and anything not verified is marked as such in [docs/medical-thresholds.md](docs/medical-thresholds.md). |
 | **OpenAI Codex** | OpenAI | The first version of the Mind psychology engine (`src/demo/psych/engine/`). |
 | *[Team: add any other AI you used, e.g. for the logo, images, slides, video or texts]* | | |

@@ -5,6 +5,7 @@ dist/
 # secretos y datos personales: NUNCA al repositorio
 .env
 .env.*
+!.env.example
 .data/
 Caddyfile
 # pruebas, capturas y descargas locales
