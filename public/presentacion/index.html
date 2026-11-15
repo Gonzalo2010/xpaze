@@ -310,16 +310,30 @@ kbd{font-family:inherit;font-size:.82em;font-weight:600;border:1px solid var(--l
 }
 
 /* 6 colonias */
-.colony{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:clamp(1rem,2.4vw,2rem);align-items:center;margin:clamp(.6rem,2vh,1.2rem) 0 clamp(.6rem,1.6vh,1rem);
-  padding:clamp(.9rem,2vh,1.3rem) clamp(1rem,2vw,1.6rem);border-radius:22px;color:#EEF1F7;background:radial-gradient(60% 120% at 100% 0%,rgba(255,181,71,.16),transparent 60%),#070B16;box-shadow:0 30px 60px -36px rgba(7,11,22,.8)}
-.colony__art{width:clamp(90px,10vw,140px);height:auto}
-.c-moon{fill:#EEF1F7}.c-crater{fill:#C9CFDC}.c-mars{fill:#E2703A}.c-link{stroke:#FFB547;stroke-width:2;stroke-dasharray:3 4;fill:none}
-.colony__k{margin:0 0 .25rem;font-size:.78em;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#FFB547}
-.colony__t{margin:0;font-size:1.02em;line-height:1.42;color:#DDE2EE;max-width:62ch}
+.colony{position:relative;overflow:hidden;margin:clamp(.6rem,2vh,1.2rem) 0 clamp(.6rem,1.6vh,1rem);padding:clamp(1rem,2.4vh,1.5rem) clamp(1.1rem,2.4vw,2rem);border-radius:24px;color:#EEF1F7;
+  background:radial-gradient(55% 140% at 100% 0%,rgba(226,112,58,.22),transparent 60%),radial-gradient(40% 120% at 0% 100%,rgba(120,140,200,.18),transparent 60%),#070B16;box-shadow:0 30px 60px -36px rgba(7,11,22,.85)}
+.colony::before{content:"";position:absolute;inset:0;background-image:radial-gradient(1px 1px at 12% 30%,#fff8,transparent),radial-gradient(1px 1px at 38% 70%,#fff6,transparent),radial-gradient(1px 1px at 63% 22%,#fff7,transparent),radial-gradient(1px 1px at 82% 64%,#fff5,transparent),radial-gradient(1px 1px at 92% 18%,#fff6,transparent);pointer-events:none}
+.col__route{position:relative;display:grid;grid-template-columns:auto 1fr auto 2.2fr auto;align-items:center;gap:.6rem;margin-bottom:clamp(.8rem,2vh,1.2rem)}
+.col__stop{display:grid;justify-items:center;gap:.15rem;text-align:center;min-width:4.5em}
+.col__stop i{display:block;border-radius:50%}
+.p-earth{width:1.6em;height:1.6em;background:radial-gradient(circle at 35% 30%,#8fd3ff,#2f7bea 50%,#0c3a86);box-shadow:0 0 18px #2f7bea88}
+.p-moon{width:1.35em;height:1.35em;background:radial-gradient(circle at 35% 30%,#fff,#c9cfdc 60%,#8e96a8);box-shadow:0 0 16px #eef1f766}
+.p-mars{width:1.5em;height:1.5em;background:radial-gradient(circle at 35% 30%,#ffb08a,#e2703a 55%,#8c3415);box-shadow:0 0 18px #e2703a88}
+.col__stop b{font-size:.92em;font-weight:650}
+.col__stop em{font-style:normal;font-size:.7em;color:#8A94AB;letter-spacing:.02em}
+.col__leg{position:relative;height:2px;background:repeating-linear-gradient(90deg,#FFB547 0 6px,transparent 6px 12px);margin-top:-1.6em}
+.col__leg em{position:absolute;left:50%;top:-1.6em;transform:translateX(-50%);font-style:normal;font-size:.74em;font-weight:700;color:#FFB547;white-space:nowrap;background:#070B16;padding:0 .4em}
+.col__leg--long{background:repeating-linear-gradient(90deg,#FFB547 0 10px,transparent 10px 18px)}
+.col__body{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(1rem,2.6vw,2.2rem);align-items:center;padding-top:clamp(.7rem,1.8vh,1rem);border-top:1px solid rgba(238,241,247,.1)}
+.colony__k{margin:0 0 .3rem;font-size:.76em;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#FFB547}
+.colony__t{margin:0;font-size:1.04em;line-height:1.45;color:#DDE2EE}
 .colony__t .luna{color:#FFB547}
-.colony__pts{list-style:none;margin:0;padding:0;display:grid;gap:.45rem;font-size:.86em;color:#A9B3C9;white-space:nowrap}
-.colony__pts b{color:#fff;font-weight:650}
-@media (max-width:900px){.colony{grid-template-columns:1fr}.colony__pts{white-space:normal}}
+.col__stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem}
+.col__stats div{padding:.65rem .75rem;border-radius:14px;background:rgba(238,241,247,.05);border:1px solid rgba(238,241,247,.1)}
+.col__stats b{display:block;font-size:clamp(1.25rem,.8rem + 1vw,1.8rem);font-weight:700;letter-spacing:-.04em;line-height:1.05;color:#fff;white-space:nowrap}
+.col__stats span{display:block;margin-top:.2rem;font-size:.74em;line-height:1.3;color:#A9B3C9}
+@media (max-width:900px){.col__body{grid-template-columns:1fr}.col__route{grid-template-columns:auto 1fr auto 1.4fr auto}}
+@media (max-width:560px){.col__stats{grid-template-columns:1fr}}
 
 /* 8 en la Tierra */
 .earth{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(1.5rem,4vw,4rem);align-items:center;margin-top:clamp(1rem,3vh,2rem)}
@@ -744,16 +758,24 @@ body:not(.proto-ok) .if-proto,body.proto-ok .if-noproto{display:none!important}
   <div class="inner">
     <h2 class="split" data-en="Built for the first space colonies." style="max-width:none">Pensado para las primeras colonias espaciales.</h2>
     <div class="colony" data-a>
-      <svg class="colony__art" viewBox="0 0 120 80" aria-hidden="true"><circle cx="30" cy="40" r="22" class="c-moon"/><circle cx="24" cy="34" r="4" class="c-crater"/><circle cx="36" cy="47" r="3" class="c-crater"/><circle cx="90" cy="40" r="16" class="c-mars"/><path d="M52 40h22" class="c-link"/></svg>
-      <div>
-        <p class="colony__k" data-en="The Moon, then Mars">La Luna, después Marte</p>
-        <p class="colony__t" data-en="Colonies will live for years with no hospital, and on Mars every message to Earth takes 3 to 22 minutes. Each settlement will need its own medical autonomy: XPaze watches everyone’s health every day, and <b class=&quot;luna&quot;>Luna AI</b> predicts how each body adapts, in that gravity, from day one.">Las colonias vivirán años sin hospital, y en Marte cada mensaje a la Tierra tarda de 3 a 22 minutos. Cada asentamiento necesitará su propia autonomía médica: XPaze vigila la salud de todos cada día y <b class="luna">Luna AI</b> predice cómo se adapta cada cuerpo, en esa gravedad, desde el primer día.</p>
+      <div class="col__route" aria-hidden="true">
+        <span class="col__stop"><i class="p-earth"></i><b data-en="Earth">Tierra</b><em data-en="hospital">hospital</em></span>
+        <span class="col__leg"><em data-en="1.3 s">1,3 s</em></span>
+        <span class="col__stop"><i class="p-moon"></i><b data-en="Moon">Luna</b><em data-en="first colony">primera colonia</em></span>
+        <span class="col__leg col__leg--long"><em data-en="3–22 min">3–22 min</em></span>
+        <span class="col__stop"><i class="p-mars"></i><b data-en="Mars">Marte</b><em data-en="years away">años lejos</em></span>
       </div>
-      <ul class="colony__pts">
-        <li data-en="<b>Years</b> away from a hospital"><b>Años</b> lejos de un hospital</li>
-        <li data-en="<b>3–22 min</b> to Earth from Mars"><b>3–22 min</b> hasta la Tierra desde Marte</li>
-        <li data-en="<b>Every body</b> adapts differently"><b>Cada cuerpo</b> se adapta distinto</li>
-      </ul>
+      <div class="col__body">
+        <div class="col__copy">
+          <p class="colony__k" data-en="The Moon, then Mars">La Luna, después Marte</p>
+          <p class="colony__t" data-en="Each settlement will need its own medical autonomy. XPaze watches everyone’s health every day, and <b class=&quot;luna&quot;>Luna AI</b> predicts how each body adapts to that gravity.">Cada asentamiento necesitará su propia autonomía médica. XPaze vigila la salud de todos cada día y <b class="luna">Luna AI</b> predice cómo se adapta cada cuerpo a esa gravedad.</p>
+        </div>
+        <div class="col__stats">
+          <div><b data-en="Years">Años</b><span data-en="without a hospital">sin hospital</span></div>
+          <div><b>22 min</b><span data-en="for each message from Mars">por mensaje desde Marte</span></div>
+          <div><b>1 : 1</b><span data-en="a normal for each body">una normal para cada cuerpo</span></div>
+        </div>
+      </div>
     </div>
     <p class="lede" data-a data-en="And we can start today, on Earth: what works offline in space works anywhere far from a doctor.">Y podemos empezar hoy, en la Tierra: lo que funciona sin conexión en el espacio funciona en cualquier lugar lejos de un médico.</p>
     <div class="earth">
