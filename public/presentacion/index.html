@@ -1086,7 +1086,7 @@ document.querySelectorAll("svg.mini").forEach(function(svg){
 var hooks={
   inicio:{enter:function(){ecgHero.start();},leave:function(){ecgHero.stop();}},
   mente:{enter:function(){orbPaze.setMood("escucha");orbPaze.start();},leave:function(){orbPaze.stop();}},
-  hoy:{enter:function(){var ai=document.getElementById("astroImg");if(ai&&!ai.getAttribute("src")){ai.onerror=function(){ai.parentElement.style.display="none";};ai.src="/presentacion/astronaut.webp";}var lis=[].slice.call(document.querySelectorAll("#ssteps li")),f=document.getElementById("sfill");
+  hoy:{enter:function(){astroStart();var lis=[].slice.call(document.querySelectorAll("#ssteps li")),f=document.getElementById("sfill");
     lis.forEach(function(l){l.classList.remove("on");});f.style.width="0";
     lis.forEach(function(l,i){later(function(){l.classList.add("on");f.style.width=(i===lis.length-1?100:(l.offsetLeft+8)/l.parentElement.offsetWidth*100)+"%";},RM?0:1400+i*650);});}}
 };
@@ -1218,7 +1218,16 @@ addEventListener("afterprint",function(){slides.forEach(function(s,k){if(k!==cur
 
 
 /* ---------- a prueba de cuelgues ---------- */
-(window.requestIdleCallback||function(f){setTimeout(f,3000);})(function(){var i=new Image();i.decoding="async";i.src="/presentacion/astronaut.webp";});
+/* astronauta: se descarga una vez y, cada vez que se entra en la 7, empieza desde el primer fotograma */
+var astroBlob=null,astroUrl=null,astroLoading=null;
+function astroLoad(){if(astroBlob||astroLoading)return astroLoading;astroLoading=fetch("/presentacion/astronaut.webp").then(function(r){if(!r.ok)throw 0;return r.blob();}).then(function(b){astroBlob=b;}).catch(function(){astroLoading=null;});return astroLoading;}
+function astroStart(){
+  var ai=document.getElementById("astroImg");if(!ai)return;
+  function show(){if(!astroBlob)return;if(astroUrl)URL.revokeObjectURL(astroUrl);astroUrl=URL.createObjectURL(astroBlob);ai.src=astroUrl;}
+  if(astroBlob)show();else{var w=astroLoad();if(w)w.then(show);}
+}
+ai_err:{var _ai=document.getElementById("astroImg");if(_ai)_ai.onerror=function(){_ai.style.visibility="hidden";};}
+(window.requestIdleCallback||function(f){setTimeout(f,3000);})(astroLoad);
 /* si el equipo no da más de ~24 fps durante 3 s seguidos, se quitan el astronauta y las estrellas */
 (function(){
   var last=performance.now(),slowMs=0,lite=false;
