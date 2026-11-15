@@ -309,6 +309,18 @@ kbd{font-family:inherit;font-size:.82em;font-weight:600;border:1px solid var(--l
   .nm{grid-template-columns:auto 1fr}
 }
 
+/* 6 colonias */
+.colony{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:clamp(1rem,2.4vw,2rem);align-items:center;margin:clamp(.6rem,2vh,1.2rem) 0 clamp(.6rem,1.6vh,1rem);
+  padding:clamp(.9rem,2vh,1.3rem) clamp(1rem,2vw,1.6rem);border-radius:22px;color:#EEF1F7;background:radial-gradient(60% 120% at 100% 0%,rgba(255,181,71,.16),transparent 60%),#070B16;box-shadow:0 30px 60px -36px rgba(7,11,22,.8)}
+.colony__art{width:clamp(90px,10vw,140px);height:auto}
+.c-moon{fill:#EEF1F7}.c-crater{fill:#C9CFDC}.c-mars{fill:#E2703A}.c-link{stroke:#FFB547;stroke-width:2;stroke-dasharray:3 4;fill:none}
+.colony__k{margin:0 0 .25rem;font-size:.78em;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#FFB547}
+.colony__t{margin:0;font-size:1.02em;line-height:1.42;color:#DDE2EE;max-width:62ch}
+.colony__t .luna{color:#FFB547}
+.colony__pts{list-style:none;margin:0;padding:0;display:grid;gap:.45rem;font-size:.86em;color:#A9B3C9;white-space:nowrap}
+.colony__pts b{color:#fff;font-weight:650}
+@media (max-width:900px){.colony{grid-template-columns:1fr}.colony__pts{white-space:normal}}
+
 /* 8 en la Tierra */
 .earth{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(1.5rem,4vw,4rem);align-items:center;margin-top:clamp(1rem,3vh,2rem)}
 .estats{display:grid;gap:clamp(1rem,3vh,1.8rem)}
@@ -728,10 +740,22 @@ body:not(.proto-ok) .if-proto,body.proto-ok .if-noproto{display:none!important}
 </section>
 
 <!-- 6b -->
-<section class="slide s8" id="tierra" data-name="En la Tierra" data-name-en="On Earth">
+<section class="slide s8" id="tierra" data-name="Colonias" data-name-en="Colonies">
   <div class="inner">
-    <h2 class="split" data-en="Not just for astronauts." style="max-width:none">No es solo para astronautas.</h2>
-    <p class="lede" data-a data-en="What works offline in space works anywhere far from a doctor.">Lo que funciona sin conexión en el espacio funciona en cualquier lugar lejos de un médico.</p>
+    <h2 class="split" data-en="Built for the first space colonies." style="max-width:none">Pensado para las primeras colonias espaciales.</h2>
+    <div class="colony" data-a>
+      <svg class="colony__art" viewBox="0 0 120 80" aria-hidden="true"><circle cx="30" cy="40" r="22" class="c-moon"/><circle cx="24" cy="34" r="4" class="c-crater"/><circle cx="36" cy="47" r="3" class="c-crater"/><circle cx="90" cy="40" r="16" class="c-mars"/><path d="M52 40h22" class="c-link"/></svg>
+      <div>
+        <p class="colony__k" data-en="The Moon, then Mars">La Luna, después Marte</p>
+        <p class="colony__t" data-en="Colonies will live for years with no hospital, and on Mars every message to Earth takes 3 to 22 minutes. Each settlement will need its own medical autonomy: XPaze watches everyone’s health every day, and <b class=&quot;luna&quot;>Luna AI</b> predicts how each body adapts, in that gravity, from day one.">Las colonias vivirán años sin hospital, y en Marte cada mensaje a la Tierra tarda de 3 a 22 minutos. Cada asentamiento necesitará su propia autonomía médica: XPaze vigila la salud de todos cada día y <b class="luna">Luna AI</b> predice cómo se adapta cada cuerpo, en esa gravedad, desde el primer día.</p>
+      </div>
+      <ul class="colony__pts">
+        <li data-en="<b>Years</b> away from a hospital"><b>Años</b> lejos de un hospital</li>
+        <li data-en="<b>3–22 min</b> to Earth from Mars"><b>3–22 min</b> hasta la Tierra desde Marte</li>
+        <li data-en="<b>Every body</b> adapts differently"><b>Cada cuerpo</b> se adapta distinto</li>
+      </ul>
+    </div>
+    <p class="lede" data-a data-en="And we can start today, on Earth: what works offline in space works anywhere far from a doctor.">Y podemos empezar hoy, en la Tierra: lo que funciona sin conexión en el espacio funciona en cualquier lugar lejos de un médico.</p>
     <div class="earth">
       <div class="estats">
         <div data-a><div class="enum"><b data-count="1890000">0</b></div><p data-en="seafarers worldwide, weeks at sea with no doctor on board.">marinos en todo el mundo, semanas en alta mar sin un médico a bordo.</p></div>
@@ -931,9 +955,9 @@ Trace.prototype.draw=function(){
 };
 Trace.prototype.start=function(){
   if(this.running)return;
-  if(RM){this.prefill(6);this.draw();return;}
+  this.resize();if(!this.samples.length||this.samples.every(function(v){return v===0;}))this.prefill(3);
   this.running=true;var self=this,prev=performance.now();
-  (function loop(now){if(!self.running)return;var dt=Math.min(.05,(now-prev)/1000);prev=now;self.step(dt);self.draw();self.raf=requestAnimationFrame(loop);})(prev);
+  (function loop(now){if(!self.running)return;if(!self.w||self.cv.width<4)self.resize();var dt=Math.min(.05,Math.max(0,(now-prev)/1000));prev=now;self.step(dt);self.draw();self.raf=requestAnimationFrame(loop);})(prev);
 };
 Trace.prototype.stop=function(){this.running=false;cancelAnimationFrame(this.raf);};
 
