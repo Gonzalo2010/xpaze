@@ -1070,7 +1070,7 @@ function PazeOrb(host,o){
     }
   }
   this.gl=gl;
-  if(!gl){cv.remove();host.classList.add("orb-fallback");return;}
+  if(!gl){cv.remove();var im=document.createElement("img");im.src="/app/paze-orb.webp";im.alt="";im.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none";im.onerror=function(){im.remove();host.classList.add("orb-fallback");};host.appendChild(im);return;}
   var self=this;this.resize();
   if(window.ResizeObserver)new ResizeObserver(function(){self.resize();self.draw(0);}).observe(host);
   this.draw(0);

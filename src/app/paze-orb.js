@@ -92,7 +92,17 @@ export class PazeOrb {
       }
     }
     this.gl = gl;
-    if (!gl) { cv.remove(); host.classList.add('orb-fallback'); return; }
+    if (!gl) {
+      // sin WebGL: el mismo orbe, grabado (vídeo con fondo transparente) y animado con la voz
+      cv.remove();
+      host.classList.add('orb-video');
+      const img = document.createElement('img');
+      img.src = '/app/paze-orb.webp'; img.alt = ''; img.decoding = 'async'; img.className = 'orb-img';
+      img.onerror = () => { img.remove(); host.classList.add('orb-fallback'); };
+      host.appendChild(img);
+      this.img = img;
+      return;
+    }
     this.resize();
     if (typeof ResizeObserver !== 'undefined') { this.ro = new ResizeObserver(() => { this.resize(); this.draw(0); }); this.ro.observe(host); }
     this.draw(0);
@@ -150,7 +160,22 @@ export class PazeOrb {
   }
 
   start() {
-    if (this.running || !this.gl) return;
+    if (this.running) return;
+    if (!this.gl) { // vídeo: late con la voz y respira
+      if (!this.img) return;
+      this.running = true;
+      const loop = () => {
+        if (!this.running) return;
+        this.clock += 1 / 60;
+        this.mouth += ((this.speaking ? this.speechAmp : 0) - this.mouth) * 0.25;
+        let k = 1 + 0.025 * Math.sin(this.clock * 1.1) + this.mouth * 0.12;
+        if (this.breathFn) { const b = this.breathFn(); if (b != null) k = 0.82 + 0.36 * b; }
+        this.img.style.transform = `scale(${k.toFixed(3)})`;
+        this.raf = requestAnimationFrame(loop);
+      };
+      this.raf = requestAnimationFrame(loop);
+      return;
+    }
     this.running = true;
     let prev = performance.now();
     const loop = (now) => {
