@@ -78,6 +78,16 @@ export function seedPreflight(uid, storyKey, now = Date.now()) {
   }));
 }
 
+/** Tripulación simulada lista para entrenar Luna AI: chequeos en Tierra y en vuelo con su día de misión. */
+export function crewDataset(people, now = Date.now()) {
+  const launch = now - MISSION_DAY * DAY;
+  return people.map(({ uid, story, history }) => ({
+    id: uid,
+    pre: seedPreflight(uid, story, now),
+    flight: (history || seedStory(uid, story, now)).filter((e) => e.at >= launch).map((e) => ({ ...e, day: Math.round((e.at - launch) / DAY) })),
+  }));
+}
+
 /** Recalcula el semáforo de un chequeo guardado (mismas reglas fijas que el chequeo). */
 export function resultsFromEntry(e) {
   const r = [];

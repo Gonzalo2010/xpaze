@@ -1,7 +1,15 @@
 // Luna AI: prueba del modelo de adaptación al espacio (src/app/adapt.js).
 import '../fonts.css';
 import './luna.css';
-import { predict, update, contextFor, EFFECTS } from '../app/adapt.js';
+import { contextFor, EFFECTS } from '../app/adapt.js';
+import { train, forecast, backtest, METRICS as LM } from '../app/luna.js';
+import { crewDataset } from '../app/story.js';
+
+// Luna AI se entrena al abrir la página con la tripulación simulada (4 personas, ~30 días en vuelo cada una)
+const CREW = crewDataset([['04A37F1C', 'vega'], ['045BE290', 'iker'], ['04C819D4', 'noa'], ['04E1663A', 'amara']].map(([uid, story]) => ({ uid, story })));
+const TRAINED = train(CREW);
+const N_CHECKS = CREW.reduce((s, p) => s + p.flight.length, 0);
+let BT = null;
 
 const q = new URLSearchParams(location.search);
 let lang = 'en';
@@ -33,9 +41,7 @@ function earthChecks() {
 }
 
 function model(day) {
-  const pre = earthChecks();
-  const flight = state.flight.filter((e) => e.day <= day);
-  return update(predict(pre, day), flight);
+  return forecast(TRAINED, earthChecks(), state.flight.filter((e) => e.day <= day), day);
 }
 
 function chart(k, unit, d) {
@@ -61,6 +67,17 @@ function chart(k, unit, d) {
   </svg>`;
 }
 const getter = (k) => ({ sys: (e) => e.bp?.sys, dia: (e) => e.bp?.dia, hr: (e) => e.bpm, temp: (e) => e.temp, sleep: (e) => e.mind?.sleep })[k];
+
+function btTable() {
+  if (!BT) return `<p class="lfine">${L('Evaluando…', 'Evaluating…')}</p>`;
+  const names = { sys: L('Sistólica', 'Systolic'), dia: L('Diastólica', 'Diastolic'), hr: L('Pulso', 'Pulse'), temp: L('Temperatura', 'Temperature'), sleep: L('Sueño', 'Sleep') };
+  const dec = { sys: 1, dia: 1, hr: 1, temp: 2, sleep: 2 };
+  const rows = LM.filter((k) => BT[k]).map((k) => { const r = BT[k], h = TRAINED.metrics[k].h; const best = Math.min(r.luna, r.earth, r.last, r.nasa);
+    const c = (v) => `<td class="${Math.abs(v - best) < 1e-9 ? 'best' : ''}">${f(v, dec[k])}</td>`;
+    return `<tr><th>${names[k]}</th>${c(r.luna)}${c(r.earth)}${c(r.last)}${c(r.nasa)}<td>${Math.round(r.coverage * 100)} %</td><td class="hp">ℓ ${h.l} d · σ ${f(Math.sqrt(h.sf2), dec[k])} · ${L('ruido', 'noise')} ${f(Math.sqrt(h.sn2), dec[k])}</td></tr>`; }).join('');
+  return `<div class="btwrap"><table class="lt2 bt"><thead><tr><th></th><th>Luna AI</th><th>${L('Valor en la Tierra', 'Earth value')}</th><th>${L('Último valor', 'Last value')}</th><th>${L('Solo NASA', 'NASA only')}</th><th>${L('Cobertura 95 %', '95% coverage')}</th><th>${L('Parámetros aprendidos', 'Learned parameters')}</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="lfine">${L('Error medio (cuanto menos, mejor) al predecir cada día solo con los anteriores y sin haber visto a esa persona al entrenar (validación dejando una persona fuera). En verde, el mejor. Datos simulados: demuestra que el modelo aprende, no su precisión con astronautas reales, que exige datos reales.', 'Mean error (lower is better) predicting each day only from the previous ones and without that person in training (leave-one-person-out). In green, the best. Simulated data: it shows the model learns, not its accuracy on real astronauts, which needs real data.')}</p>`;
+}
 
 function render() {
   const m = model(state.day);
@@ -95,10 +112,15 @@ function render() {
     <div class="lgrid">${METRICS.map(([k, n, u, d]) => (m[k] ? `<figure><figcaption>${n} <span>${u}</span></figcaption>${chart(k, u, d)}</figure>` : '')).join('')}</div>
   </section>
   <section class="lcard">
-    <h2>${L('4 · Añade un chequeo en vuelo', '4 · Add an in-flight check-up')}</h2>
+    <h2>${L('5 · Añade un chequeo en vuelo', '5 · Add an in-flight check-up')}</h2>
     <p class="lfine">${L('Escribe lo que has medido en el día de misión elegido. Luna AI mezcla la predicción con tus datos: cuantos más chequeos, más manda lo tuyo.', 'Enter what you measured on the chosen mission day. Luna AI blends the prediction with your data: the more check-ups, the more yours count.')}</p>
     <div class="ladd">${[['sys', L('Sistólica', 'Systolic')], ['dia', L('Diastólica', 'Diastolic')], ['hr', L('Pulso', 'Pulse')], ['temp', L('Temp.', 'Temp.')], ['sleep', L('Sueño', 'Sleep')]].map(([k, n]) => `<label><span>${n}</span><input type="number" step="any" data-o="${k}"/></label>`).join('')}
       <button class="lb" data-add>${L(`Añadir en el día ${state.day}`, `Add on day ${state.day}`)}</button>${state.flight.length ? `<button class="lb lb--g" data-clear>${L('Borrar chequeos', 'Clear check-ups')} (${state.flight.length})</button>` : ''}</div>
+  </section>
+  <section class="lcard ltrain">
+    <h2>${L('4 · Entrenamiento y precisión', '4 · Training and accuracy')}</h2>
+    <p class="lfine">${L(`Luna AI se acaba de entrenar en tu navegador con ${N_CHECKS} chequeos en vuelo (${TRAINED.nTrain} medidas) de 4 tripulantes simulados. Para cada medida ha elegido sus parámetros maximizando la verosimilitud de los datos.`, `Luna AI has just trained in your browser on ${N_CHECKS} in-flight check-ups (${TRAINED.nTrain} measurements) from 4 simulated crew members. For each measurement it chose its parameters by maximising the likelihood of the data.`)}</p>
+    <div id="bt">${btTable()}</div>
   </section>
   <section class="lcard lsrc">
     <h2>${L('Cómo funciona y de dónde salen los datos', 'How it works and where the data comes from')}</h2>
@@ -106,7 +128,8 @@ function render() {
       <li>${L('<b>Tu línea base en la Tierra</b>: la mediana y la variación de tus chequeos antes del despegue.', '<b>Your baseline on Earth</b>: the median and spread of your check-ups before launch.')}</li>
       <li>${L('<b>Efectos medidos por la NASA en la ISS</b>, día a día, con la variación entre astronautas:', '<b>Effects measured by NASA on the ISS</b>, day by day, with the variation between astronauts:')}
         <ul>${Object.entries(EFFECTS).map(([k, e]) => `<li><b>${k}</b>: ${e.source}${e.assumption ? ` <i>(${L('suposición del modelo', 'model assumption')}: ${e.assumption})</i>` : ''}</li>`).join('')}</ul></li>
-      <li>${L('<b>Corrección con tus datos en vuelo</b> (actualización bayesiana): la predicción vale como 5 chequeos; tus medidas reales la van desplazando.', '<b>Correction with your in-flight data</b> (Bayesian update): the prediction counts as 5 check-ups; your real measurements shift it.')}</li>
+      <li>${L('<b>Lo que aprende de la tripulación</b>: una corrección de la curva de la NASA ajustada con los chequeos en vuelo de todos (regresión con regularización). Por ejemplo, ha aprendido que la estación mide la temperatura en la frente y no sube como la central.', '<b>What it learns from the crew</b>: a correction to the NASA curve fitted on everyone’s in-flight check-ups (regularised regression). For example, it has learned that the station measures forehead temperature, which does not rise like core temperature.')}</li>
+      <li>${L('<b>Tu curva personal</b>: un proceso gaussiano aprende cómo te adaptas tú a partir de tus chequeos en vuelo y da la incertidumbre de cada predicción. Sus parámetros (escala de tiempo, amplitud y ruido) se aprenden maximizando la verosimilitud de los datos.', '<b>Your personal curve</b>: a Gaussian process learns how you adapt from your in-flight check-ups and gives the uncertainty of each prediction. Its parameters (time scale, amplitude and noise) are learned by maximising the likelihood of the data.')}</li>
     </ol>
     <p class="lwarn">${L('Luna AI no está entrenada con datos individuales de astronautas: no son públicos. Predice con los efectos medios publicados y aprende de cada persona. Es un prototipo de investigación, no un dispositivo médico.', 'Luna AI is not trained on individual astronaut data: it is not public. It predicts from published average effects and learns from each person. It is a research prototype, not a medical device.')}</p>
   </section>
@@ -130,3 +153,4 @@ function wire() {
 }
 document.documentElement.lang = lang;
 render();
+setTimeout(() => { BT = backtest(CREW); const el = document.getElementById('bt'); if (el) el.innerHTML = btTable(); }, 60);

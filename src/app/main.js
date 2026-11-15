@@ -6,8 +6,9 @@ import './app.css';
 import { BleLink, SimLink, WifiLink, bluetoothAvailable, wifiAvailable } from './link.js';
 import { MEASURES, ENVIRONMENTS, PHQ2, PHQ2_ANSWERS, RED_FLAGS, SELF_HARM, isSelfHarm, classify, actionPlan, cabinLevel, co2Level } from './clinical.js';
 import { baselineBand, baselineChart, drawEcg } from './charts.js';
-import { seedStory, storyBody, seedPreflight, MISSION_DAY, trendInsights, resultsFromEntry, reportText, SEED_VERSION } from './story.js';
-import { predict, update, judge, contextFor, EFFECTS } from './adapt.js';
+import { seedStory, storyBody, seedPreflight, crewDataset, MISSION_DAY, trendInsights, resultsFromEntry, reportText, SEED_VERSION } from './story.js';
+import { judge, contextFor } from './adapt.js';
+import { train as lunaTrain, forecast as lunaForecast } from './luna.js';
 import { streamAI } from './ai.js';
 import { PazeOrb, bindOrbToVoice } from './paze-orb.js';
 import { assessSpace } from './space.js';
@@ -1618,17 +1619,20 @@ function seedAll() {
 
 // «Tu cuerpo en el espacio»: el modelo de adaptación predice, con la línea base en la Tierra, la nueva
 // normal de cada constante este día de misión, y las medidas en vuelo corrigen la predicción.
+// Luna AI se entrena con el resto de la tripulación y predice a esta persona con sus chequeos anteriores
+let lunaCache = null;
 function spaceModel(uid) {
   const crew = crewByUid[uid];
   if (!crew) return null;
-  const pre = seedPreflight(uid, crew.id);
+  if (!lunaCache) lunaCache = crewDataset(PEOPLE.filter((p) => crewByUid[p.uid]).map((p) => ({ uid: p.uid, story: crewByUid[p.uid].id, history: (saved.history[p.uid] || []).filter((e) => e.seed) })));
+  const me = lunaCache.find((p) => p.id === uid);
+  if (!me || !me.flight.length) return null;
+  const model = lunaTrain(lunaCache.filter((p) => p.id !== uid));
   const flight = (saved.history[uid] || []).slice().sort((a, b) => a.at - b.at);
-  if (!flight.length) return null;
   const last = flight.at(-1);
   const day = MISSION_DAY;
-  const prior = predict(pre, day);
-  const model = update(prior, flight.slice(0, -1).slice(-14));
-  return { pre, flight, last, day, prior, model };
+  const past = me.flight.filter((e) => e.day < day);
+  return { last, day, model: lunaForecast(model, me.pre, past, day) };
 }
 function spaceModelCard(uid) {
   const M = spaceModel(uid);

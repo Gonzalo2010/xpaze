@@ -45,3 +45,8 @@ h1 { font-family: "Sora", var(--font); font-weight: 600; font-size: clamp(2.8rem
 .lwarn { margin: 12px 0 0; padding: 10px 12px; border-radius: 12px; background: #fffaf0; border: 1px solid rgba(194,106,0,.25); font-size: 13.5px; }
 .lfoot { text-align: center; color: var(--muted); font-size: 14px; padding-top: 10px; } .lfoot a { color: inherit; }
 @media (max-width: 860px) { .lg { grid-template-columns: 1fr; } .ladd { grid-template-columns: 1fr 1fr; } }
+
+.btwrap { overflow-x: auto; }
+.bt td, .bt th { white-space: nowrap; }
+.bt td.best { color: var(--green); font-weight: 700; }
+.bt td.hp { font: 500 11.5px var(--mono); color: var(--muted); }
