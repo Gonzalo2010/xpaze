@@ -11,7 +11,7 @@
 	redir @demo /app/ 302
 
 	# IA de la app (pública, con límites por IP y día en server/psicologa.js)
-	@appai path /app/api/espacio /app/api/psicologa /app/api/explicar /app/api/salud /app/api/salud/* /app/api/voz/sesion
+	@appai path /app/api/espacio /app/api/psicologa /app/api/psicologa/resumen /app/api/explicar /app/api/salud /app/api/salud/* /app/api/voz/sesion
 	handle @appai {
 		uri strip_prefix /app
 		reverse_proxy 127.0.0.1:5193 {
